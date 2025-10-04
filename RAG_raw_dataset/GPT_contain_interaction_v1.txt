@@ -1,0 +1,59 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: Service Request
+
+## Goal
+Allow a customer to submit a service request after ensuring they are logged in by a login process.
+
+## Actors
+- **Customer**: Initiates the service request.
+- **Service Portal**: Manages the overall request flow.
+- **Authentication Service**: Handles the login process.
+- **Order Processing**: Handles order inquiries.
+- **Support Desk**: Handles support requests.
+
+## Preconditions
+- The customer may not yet be logged in when starting a service request.
+- The common login process is available for reuse.
+
+## Triggers
+- The customer submits a service request.
+
+## Basic Scenario
+1. The customer initiates a service request via the Service Portal.
+2. The Service Portal invokes the login process to ensure the customer is authenticated (Refer to Login Process).
+3. After successful login, the Service Portal routes the request to the appropriate handler:
+   - If it’s an order inquiry, the request goes to Order Processing.
+   - If it’s a support issue, the request goes to the Support Desk.
+4. The chosen system processes the request and returns a response to the customer.
+
+Reference Response:
+@startuml
+title Service Request
+
+actor Customer
+participant "Service Portal" as SP
+participant "Auth Service" as AS
+participant "Order Processing" as OP
+participant "Support Desk" as SD
+
+Customer -> SP: Initiate Service Request
+activate SP
+
+' Reuse the common login process as an embedded interaction:
+ref over Customer, AS 
+  Common Login Process
+end ref
+
+alt Request is for Order Inquiry
+  SP -> OP: Process Order Inquiry
+  OP --> SP: Return Order Details
+else Request is for Support
+  SP -> SD: Process Support Request
+  SD --> SP: Return Ticket Confirmation
+end
+
+SP --> Customer: Return Service Response
+deactivate SP
+@enduml

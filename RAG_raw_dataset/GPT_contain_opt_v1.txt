@@ -1,0 +1,56 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: Order Shipment
+
+## Goal
+Process an order shipment and, if the customer opted for shipment insurance, process the insurance and send policy details.
+
+## Actors
+- **Customer**: Places the order and may opt in for shipment insurance.
+- **Logistics Management System (LMS)**: Manages order shipments and coordinates optional insurance processing.
+- **Shipping Carrier (SC)**: Handles pickup and delivery of the order.
+- **Insurance Service (IS)**: Processes shipment insurance if requested.
+
+## Preconditions
+- The order is ready for shipment.
+- The customer has either opted for shipment insurance or not.
+- LMS is integrated with both the Shipping Carrier and the Insurance Service.
+
+## Triggers
+- The order is finalized and ready to be shipped.
+
+## Scenario
+1. The LMS schedules the order pickup and delivery with the Shipping Carrier.
+2. The Shipping Carrier confirms the shipment.
+3. If insurance was selected:
+   - The LMS contacts the Insurance Service to process shipment insurance.
+   - Once processed, the LMS sends the insurance policy details to the customer.
+4. The LMS notifies the customer that the order has been shipped.
+
+Reference Response:
+@startuml
+title Order Shipment
+
+actor "Customer" as C
+participant "Logistics Management System" as LMS
+participant "Shipping Carrier" as SC
+participant "Insurance Service" as IS
+
+LMS -> SC: Schedule Pickup and Delivery
+activate LMS
+activate SC
+SC --> LMS: Shipment Confirmed
+deactivate SC
+
+opt Customer opted for Insurance
+  LMS -> IS: Process Shipment Insurance
+  activate IS
+  IS --> LMS: Insurance Processed
+  deactivate IS
+  LMS -> C: Send Insurance Policy Details
+end
+
+LMS -> C: Notify Order Shipped
+deactivate LMS
+@enduml

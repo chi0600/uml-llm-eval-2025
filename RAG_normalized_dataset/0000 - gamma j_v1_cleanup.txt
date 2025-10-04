@@ -1,0 +1,88 @@
+**Title:** Register Customer – New Account
+
+**Raw:**
+
+Requirements:  
+Register Customer
+
+Goal:  
+Register a new customer account with the system.
+
+Actors:  
+Customer  
+Weborder System
+
+Preconditions:  
+Customer must be able to access the web order system via a web browser with HTTPS.
+
+Triggers:  
+Customer clicks button or link to “Register”
+
+Basic Scenario:  
+1. Customer first clicks on the button or link to initiate registration process.  
+2. System prompts the customer to fill out his/her first name, last name, billing address,  
+   shipping address, email address, and their password.  
+3. Customer enters fields.  
+4. System validates the customer's information.  
+5. System creates a new account for the Customer.  
+6. System creates a session cookie.  
+7. System displays an account home page to Customer.
+
+Alternative Scenario:  
+A1. System recognizes Customer’s cookie.  
+A2. Go to Step 7 (Basic Scenario).
+
+Postconditions:  
+The Customer registers and creates a new customer account with the system.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer can access the Weborder System via HTTPS in a web browser.  
+**Triggers:** Customer clicks the **Register** button or link.  
+
+**Flow:**  
+1. Customer → Weborder System: Click “Register”  
+2. Weborder System → Customer: Prompt for registration details (first name, last name, billing address, shipping address, email, password)  
+3. Customer → Weborder System: Submit registration details  
+4. Weborder System → Weborder System: Validate customer information  
+5. Weborder System → Weborder System: Create new customer account  
+6. Weborder System → Weborder System: Create session cookie  
+7. Weborder System → Customer: Display account home page  
+
+**Alternative Scenario:**  
+- If an existing session cookie is recognized, Weborder System → Customer: Display account home page (skip to step 7).
+
+**Postconditions:**  
+A new customer account is created and an active session cookie is set.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Customer Registration Process
+
+actor Customer
+participant "Weborder System" as WeborderSystem
+
+Customer -> WeborderSystem : Click "Register"
+activate WeborderSystem
+WeborderSystem -> Customer : Prompt for registration details
+deactivate WeborderSystem
+
+Customer -> WeborderSystem : Enter details (name, address, email, password)
+activate WeborderSystem
+
+alt Valid information
+    WeborderSystem -> WeborderSystem : Validate information
+    WeborderSystem -> WeborderSystem : Create new account
+    WeborderSystem -> WeborderSystem : Create session cookie
+    WeborderSystem --> Customer : Display account home page
+else Recognized cookie
+    WeborderSystem --> Customer : Display account home page
+end
+deactivate WeborderSystem
+
+@enduml

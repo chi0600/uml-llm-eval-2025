@@ -1,0 +1,72 @@
+**Title:** Change User Properties – Modify Account
+
+**Raw:**
+Requirements:  
+Change User Properties
+
+Goal:  
+Alter properties such as passwords and privileges of the user.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Administrator clicks button or link to “Change User Properties”
+
+Basic Scenario:  
+1. Administrator clicks the button or link to initiate change user properties process.  
+2. System prompts the Administrator to select a user by searching or viewing a list of users.  
+3. System displays the user information.  
+4. System alters the user properties.  
+5. System displays the account home page to Administrator.
+
+Postconditions:  
+An account has been altered within the system.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator can access the Weborder System via HTTPS.  
+**Triggers:** Administrator clicks the **Change User Properties** button or link.  
+
+**Flow:**  
+1. Administrator → Weborder System: Click “Change User Properties”  
+2. Weborder System → Administrator: Prompt to select a user (search or list)  
+3. Administrator → Weborder System: Select user  
+4. Weborder System → Administrator: Display user information  
+5. Administrator → Weborder System: Modify user properties (password, privileges)  
+6. Weborder System → Weborder System: Update user properties in system  
+7. Weborder System → Administrator: Display account home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+User account properties (password, privileges) are updated.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Change User Properties
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Change User Properties"
+activate System
+System -> Administrator : Prompt to select a user (search or list)
+Administrator -> System : Select user
+System -> Administrator : Display user information
+Administrator -> System : Modify user properties
+System -> System : Update user properties in system
+System -> Administrator : Display account home page
+deactivate System
+
+@enduml

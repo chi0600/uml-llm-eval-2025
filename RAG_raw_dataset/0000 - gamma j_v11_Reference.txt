@@ -1,0 +1,39 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Change User Properties
+Goal:
+Alter properties such as passwords and privileges of the user.
+Actors:
+Administrator
+Weborder System
+Preconditions:
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+Triggers:
+Administrator clicks button or link to “Change User Properties"
+Basic Scenario:
+1. Administrator clicks the button or link to initiate change user properties process.
+2. System prompts the Administrator to select a user by searching or viewing a list of users.
+3. System displays the user information.
+4. System alters the user properties.
+5. System displays the account home page to Administrator.
+Postconditions:
+An account has been altered within the system.
+
+Reference Response:
+@startuml
+title Change User Properties
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Change User Properties"
+activate System
+System -> Administrator : Prompt to select a user (search or list)
+Administrator -> System : Select a user
+System -> Administrator : Display user information
+Administrator -> System : Modify user properties
+System -> System : Update user properties in the system
+System -> Administrator : Display account home page
+deactivate System
+@enduml

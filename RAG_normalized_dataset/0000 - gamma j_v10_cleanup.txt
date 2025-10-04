@@ -1,0 +1,73 @@
+**Title:** Remove User – Remove User Process
+
+**Raw:**
+
+Requirements:  
+Remove User
+
+Goal:  
+Remove a user from the system.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Administrator clicks button or link to “Remove User”
+
+Basic Scenario:  
+1. Administrator clicks button or link to initiate the remove user process.  
+2. System prompts the Administrator to select a user by searching or viewing a list of users.  
+3. System displays user information.  
+4. System confirms deletion of selected user.  
+5. System displays account home page to Administrator.
+
+Postconditions:  
+An account has been deleted within the system.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator can access the Weborder System via HTTPS.  
+**Triggers:** Administrator clicks the **Remove User** button or link.  
+
+**Flow:**  
+1. Administrator → Weborder System: Click “Remove User”  
+2. Weborder System → Administrator: Prompt to select a user (search or list)  
+3. Administrator → Weborder System: Select user  
+4. Weborder System → Administrator: Display selected user information  
+5. Administrator → Weborder System: Confirm deletion  
+6. Weborder System → Weborder System: Delete user account  
+7. Weborder System → Administrator: Display account home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+User account is removed and the account home page is displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Remove User
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Remove User"
+activate System
+System -> Administrator : Prompt to select a user (search or list)
+Administrator -> System : Select user
+System -> Administrator : Display user information
+Administrator -> System : Confirm deletion
+System -> System : Delete user account
+System -> Administrator : Display account home page
+deactivate System
+
+@enduml

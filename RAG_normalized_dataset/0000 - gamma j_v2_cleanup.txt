@@ -1,0 +1,99 @@
+**Title:** Login Customer – Login Process
+
+**Raw:**  
+
+Requirements:  
+Login Customer
+
+Goal:  
+Login to a customer account with the system.
+
+Actors:  
+Customer
+Weborder System
+
+Preconditions:  
+Customer account must already be registered.
+
+Triggers:  
+Customer clicks button or link to “Login”
+
+Basic Scenario:  
+1. Customer clicks on the button or link to initiate the login process.  
+2. System prompts the customer for his/her email and password.  
+3. System verifies the information.  
+4. System creates session cookie.  
+5. System displays account home page to the Customer.
+
+Alternative Scenario:  
+A1. System recognizes the Customer’s cookie.  
+A2. Go to Step 5 (Basic Scenario).  
+B1. Customer enters incorrect login information.  
+B2. System prompts the Customer to resend login details to the email account.  
+B3. Customer confirms.  
+B4. System sends an email to the registered email address.  
+B5. Go to Step 1 (Basic Scenario).
+
+Postconditions:  
+The Customer is logged into the system.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer account must already be registered.  
+**Triggers:** Customer clicks the **Login** button or link.  
+
+**Flow:**  
+1. Customer → Weborder System: Click “Login”  
+2. Weborder System → Customer: Prompt for email and password  
+3. Weborder System → Weborder System: Verify information  
+4. Weborder System → Weborder System: Create session cookie  
+5. Weborder System → Customer: Display account home page  
+
+**Alternative Scenarios:**  
+- **Cookie recognized:** Weborder System → Customer: Display account home page (skip to step 5).  
+- **Incorrect credentials:**  
+  1. Customer → Weborder System: Enter incorrect email/password  
+  2. Weborder System → Customer: Prompt to resend login details  
+  3. Customer → Weborder System: Confirm resend  
+  4. Weborder System → Weborder System: Send email to registered address  
+  5. (Return to Basic Scenario step 1)
+
+**Postconditions:**  
+Customer is logged into the system.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Customer Login Process
+
+actor Customer
+participant "Weborder System" as WeborderSystem
+
+Customer -> WeborderSystem : Click "Login"
+activate WeborderSystem
+WeborderSystem -> Customer : Prompt for email and password
+deactivate WeborderSystem
+
+alt Cookie recognized
+    WeborderSystem -> Customer : Display account home page
+    activate WeborderSystem
+else No cookie
+    Customer -> WeborderSystem : Enter email and password
+    WeborderSystem -> WeborderSystem : Verify information
+
+    alt Correct information
+        WeborderSystem -> WeborderSystem : Create session cookie
+        WeborderSystem -> Customer : Display account home page
+    else Incorrect information
+        WeborderSystem -> Customer : Prompt to resend login details
+        Customer -> WeborderSystem : Confirm resend
+        WeborderSystem -> WeborderSystem : Send email to registered address
+        WeborderSystem -> Customer : Prompt for email and password
+    end
+end
+deactivate WeborderSystem
+@enduml

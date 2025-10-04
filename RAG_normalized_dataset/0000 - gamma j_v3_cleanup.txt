@@ -1,0 +1,77 @@
+**Title:** Edit Customer Details – Edit Account
+
+**Raw:**  
+
+Requirements:  
+Edit Customer Details
+
+Goal:  
+Edit the customer account details.
+
+Actors:  
+Customer  
+Weborder System
+
+Preconditions:  
+Customer must be logged-in on the system.
+
+Triggers:  
+Customer clicks on the button or link to "Edit Account"
+
+Basic Scenario:  
+1. Customer clicks the button or link to initiate the process to edit the account.  
+2. System displays the account home page to the Customer.  
+3. Customer clicks the button or link in order to edit the account details.  
+4. System verifies the changes.  
+5. System stores new account information.
+
+Alternative Scenario:  
+None
+
+Postcoditions:  
+The Customer has changed the account details.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer is already logged in to the system.  
+**Triggers:** Customer clicks the **Edit Account** button or link.  
+
+**Flow:**  
+1. Customer → Weborder System: Click “Edit Account”  
+2. Weborder System → Customer: Display account home page  
+3. Customer → Weborder System: Click “Edit Account Details”  
+4. Weborder System → Weborder System: Verify changes  
+5. Weborder System → Weborder System: Store new account information  
+6. Weborder System → Customer: Display confirmation message  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Customer account details are updated in the system.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Edit Customer Details
+
+actor Customer
+participant "Weborder System" as WeborderSystem
+
+Customer -> WeborderSystem : Click "Edit Account"
+activate WeborderSystem
+WeborderSystem -> Customer : Display account home page
+deactivate WeborderSystem
+
+Customer -> WeborderSystem : Click "Edit Account Details"
+activate WeborderSystem
+WeborderSystem -> WeborderSystem : Verify changes
+WeborderSystem -> WeborderSystem : Store new account information
+WeborderSystem -> Customer : Confirmation message
+deactivate WeborderSystem
+
+@enduml

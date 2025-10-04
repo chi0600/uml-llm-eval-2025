@@ -1,0 +1,86 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: Product Return and Refund
+
+## Goal
+Allow a customer to request a product return and manage different outcomes depending on the return policy, product condition, and timing.
+
+## Actors
+- **Customer (C)**: Initiates the return request.
+- **E-commerce System (ES)**: Manages the return process and checks policies.
+- **Warehouse (W)**: Receives the returned product if approved.
+- **Payment Gateway (PG)**: Processes refunds when required.
+
+## Preconditions
+- The customer has an order history in the system.
+- The product was purchased within some return window (e.g., 30 days), though this must be verified.
+- The warehouse is capable of receiving returns.
+
+## Triggers
+- The customer initiates a “Return Product” request through their order history page.
+
+## Basic Scenario - Eligible for Return
+1. The customer requests to return a product.
+2. The E-commerce System checks if the product is eligible for return (within the return window, correct order status, etc.).
+3. The E-commerce System prompts the customer to confirm the reason for the return.
+4. **If the reason is valid** (e.g., defective item):
+   - The system authorizes the return and sends a return shipping label to the customer.
+5. **If the reason is invalid** (e.g., “I changed my mind” after the return window):
+   - The system may still authorize the return but with a restocking fee.
+6. If a return is authorized, the customer ships the product back to the warehouse.
+7. Once the warehouse receives the item, the E-commerce System updates the order status.
+8. Based on the product condition:
+   - **Acceptable Condition:** A refund is issued through the Payment Gateway.
+   - **Damaged or Missing Parts:** The system may deny the refund or issue a partial refund.
+9. The E-commerce System notifies the customer of the final outcome (full refund, partial refund, or denial).
+
+## Alternative Flows A - Not Eligible for Return
+1. Same as Basic Scenario step 1. 
+2. Same as Basic Scenario step 2.
+3. The system denies the return request, explaining the policy reason.
+4. The customer can contact support for further assistance or accept the denial.
+
+Reference Response:
+@startuml
+title Product Return and Refund
+
+actor "Customer" as C
+participant "E-commerce System" as ES
+participant "Warehouse" as W
+participant "Payment Gateway" as PG
+
+C -> ES: Request Return for Product
+activate ES
+ES -> ES: Check Return Eligibility
+
+alt Eligible for Return
+  ES -> C: Prompt for return reason
+  alt Reason is valid (e.g., defective)
+    ES -> C: Authorize return, provide shipping label
+  else Reason is invalid or changed mind
+    ES -> C: Authorize return with restocking fee
+  end
+
+  C -> W: Ship product back
+  activate W
+  W -> ES: Notify product received
+  deactivate W
+
+  ES -> ES: Inspect product condition
+  alt Product in acceptable condition
+    ES -> PG: Issue Refund
+    activate PG
+    PG --> ES: Refund Confirmed
+    deactivate PG
+    ES -> C: Notify Full Refund
+  else Product damaged or incomplete
+    ES -> C: Partial refund or denial
+  end
+
+else Not Eligible for Return
+  ES -> C: Return Request Denied
+end
+
+deactivate ES
+@enduml

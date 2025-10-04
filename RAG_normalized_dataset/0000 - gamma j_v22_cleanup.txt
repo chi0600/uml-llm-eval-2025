@@ -1,0 +1,94 @@
+**Title:** Login Customer – Login Process
+
+**Raw:**
+
+Requirements:  
+Login Customer
+
+Goal:  
+Login to a customer account with the system.
+
+Actors:  
+Customer  
+Weborder System
+
+Preconditions:  
+Customer account must already be registered.
+
+Triggers:  
+Customer clicks the button or link to “Login”
+
+Basic Scenario:  
+1. Customer clicks the button or link to initiate login process.  
+2. System prompts the customer for email and password.  
+3. System verifies the information.  
+4. System creates session cookie.  
+5. System displays account home page to Customer.
+
+Alternative Scenario:  
+A1. System recognizes Customer’s cookie.  
+A2. Go to Step 5 (Basic Scenario).  
+B1. Customer enters incorrect login information.  
+B2. System prompts Customer to resend login details to email account.  
+B3. Customer confirms.  
+B4. System sends email to registered email address.  
+B5. Go to Step 1 (Basic Scenario).
+
+Postconditions:  
+The Customer is logged into the system.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer account is already registered.  
+**Triggers:** Customer clicks the **Login** button or link.
+
+**Flow:**  
+1. Customer → Weborder System: Click “Login”  
+2. Weborder System → Customer: Prompt for email and password  
+3. Customer → Weborder System: Enter email and password  
+4. Weborder System → Weborder System: Verify information  
+5. Weborder System → Weborder System: Create session cookie  
+6. Weborder System → Customer: Display account home page  
+
+**Alternative Scenarios:**  
+- **Recognized cookie:** Weborder System → Customer: Display account home page (skip to step 6).  
+- **Incorrect credentials:**  
+  1. Weborder System → Customer: Prompt to resend login details  
+  2. Customer → Weborder System: Confirm resend  
+  3. Weborder System → Customer: Send email to registered address  
+  4. (Return to Flow step 1)
+
+**Postconditions:**  
+Customer is logged into the system.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Login Customer
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Login"
+activate System
+alt Recognizes customer's cookie
+    System -> Customer : Display account home page
+else Requires login details
+    System -> Customer : Prompt for email and password
+    Customer -> System : Enter email and password
+    alt Information verified
+        System -> System : Create session cookie
+        System -> Customer : Display account home page
+    else Incorrect login information
+        System -> Customer : Prompt to resend login details to email
+        Customer -> System : Confirm resend
+        System -> Customer : Send email to registered email address
+        Customer -> System : Click "Login" and start again login process
+    end
+end
+deactivate System
+@enduml

@@ -1,0 +1,57 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 05 – Get Phonex Search Keys
+Description This use case consists of getting from TACHOnet the computed search keys (based
+on the Phonex algorithm) corresponding to the given last name and first names.
+The Member State CIAs should call upon this service when issuing a new card to get
+the computed search keys of the driver’s surname and first names, so to store them in
+their local data store. When a Member State CIA will receive a TACHOnet request
+for checking driver’s issued card, it should use the search keys given in the request to
+search against their local data store (along with the given driver’s birth date). It’s
+therefore of major importance to use a common algorithm and to store computed
+search keys in the local data store.
+Nevertheless, Member States are free to use their own Phonetic algorithm (if existing
+like in Germany). In such a case, it’s the Member State responsibility to compute the
+search keys based on the given driver’s surname and first of the first names.
+Basic flow The basic flow consists of the following steps:
+Step Action
+1 The CIA calls the TACHOnet service giving the driver’s surname and
+first names.
+2 TACHOnet checks the input parameters and, if valid, computes the
+corresponding surname and first of the first names search keys.
+3 TACHOnet returns the computed search keys as output parameters.
+Alternate flows 2a If the input parameters are invalid (e.g. illegal character,…), TACHOnet
+returns a negative status code to the request.
+Special
+requirements
+· This service should ideally be implemented as a synchronous Web Service.
+· A web interface on top of this service should also be supplied to allow the CIA
+users to access manually these TACHOnet services.
+· A downloadable version of this web service should also be made available (.NET
+and Java) to enable some Member States to install and use it locally.
+Pre-conditions The caller must provide the mandatory input parameters.
+Post-conditions The caller has received the computed search keys (or a negative error code).
+Actors · A CIA (when issuing a new card) or an enforcer (via a CIA)
+· The TACHOnet system
+
+Reference Response:
+@startuml
+title Use Case 05 – Get Phonex Search Keys
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+
+CIA -> TACHOnet : Send request (Driver's surname and first names)
+activate TACHOnet
+
+TACHOnet -> TACHOnet : Validate input parameters
+alt Valid input
+    TACHOnet -> TACHOnet : Compute Phonex search keys
+    TACHOnet -> CIA : Return computed search keys
+else Invalid input
+    TACHOnet -> CIA : Return negative status code
+end
+
+deactivate TACHOnet
+@enduml

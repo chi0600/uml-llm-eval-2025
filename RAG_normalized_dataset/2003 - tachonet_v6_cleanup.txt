@@ -1,0 +1,72 @@
+**Title:** Use Case 06 – Get US/Ascii Transliteration
+
+**Raw:**
+
+Requirements: 
+Use Case 06 – Get US/Ascii Transliteration  
+Description: This use case consists of getting from TACHOnet the US/Ascii (ISO 646 IRV) transliteration (from Latin or Greek) of the given driver’s surname, first names, place of birth and driving license number. Currently supports Greek (ISO 843:1997) and Latin → US/Ascii; other scripts may be added later.
+
+Basic flow:  
+1. CIA calls TACHOnet service with driver’s surname, first names, place of birth and driving license number.  
+2. TACHOnet validates input parameters and, if valid, transliterates each value into US/Ascii.  
+3. TACHOnet returns the transliterated values as output parameters.
+
+Alternate flow:  
+- **Invalid input:** TACHOnet returns a negative status code.
+
+Special requirements:  
+- Synchronous Web Service interface.  
+- Web UI for manual access.  
+- Downloadable .NET and Java implementations.
+
+Preconditions:  
+Caller provides all mandatory input parameters.
+
+Postconditions:  
+Caller receives transliterated values or an error code.
+
+Actors:  
+CIA (Card Issuing Authority) or enforcer via CIA; TACHOnet system.
+
+---
+
+**Clean:**  
+**Actors:** CIA, TACHOnet  
+**Preconditions:** Caller supplies surname, first names, place of birth, and driving license number.  
+**Triggers:** CIA invokes “Get US/Ascii Transliteration” service.
+
+**Flow:**  
+1. CIA → TACHOnet: Send request(surname, first names, place of birth, license number)  
+2. TACHOnet → TACHOnet: Validate input parameters  
+3. alt Valid input  
+   3.1 TACHOnet → TACHOnet: Transliterate to US/Ascii  
+   3.2 TACHOnet → CIA: Return transliterated values  
+   else Invalid input  
+   3.1 TACHOnet → CIA: Return negative status code  
+end  
+
+**Postconditions:** CIA receives transliterated outputs or error.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Use Case 06 – Get US/Ascii Transliteration
+
+actor "Card Issuing Authority" as CIA
+participant TACHOnet
+
+CIA -> TACHOnet : Send request (surname, first names, place of birth, license no.)
+activate TACHOnet
+
+TACHOnet -> TACHOnet : Validate input parameters
+alt Valid input
+    TACHOnet -> TACHOnet : Transliterate values to US/Ascii
+    TACHOnet -> CIA : Return transliterated values
+else Invalid input
+    TACHOnet -> CIA : Return negative status code
+end
+
+deactivate TACHOnet
+@enduml

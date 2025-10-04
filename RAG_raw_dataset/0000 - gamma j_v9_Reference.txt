@@ -1,0 +1,40 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Add User
+Goal:
+Register a new customer, sales person, or administrator account with the system.
+Actors:
+Administrator
+Weborder System
+Preconditions:
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+Triggers:
+Administrator clicks button or link to "Add Users"
+Basic Scenario:
+1. Administrator clicks the button or link to initiate Add user process.
+2. System prompts the Administrator to fill out first name, last name, username, email
+address, password, and privileges of the user.
+3. System validates new user information.
+4. System creates a new account for the new user with desired privileges.
+5. System displays account home page to Administrator.
+Postconditions:
+A new customer account is created within the system.
+
+Reference Response:
+@startuml
+title Add User
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Add Users"
+activate System
+System -> Administrator : Prompt to fill user details
+Administrator -> System : Enter first name, last name, username, email, password, and privileges
+System -> System : Validate new user information
+System -> System : Create new account with privileges
+System -> Administrator : Display account home page
+deactivate System
+
+@enduml

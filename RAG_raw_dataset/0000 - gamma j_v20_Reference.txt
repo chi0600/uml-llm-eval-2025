@@ -1,0 +1,42 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Update Product Attributes
+Goal:
+Update Product attributes within the system.
+Actors:
+Sales Person
+Weborder System
+Preconditions:
+Sales Person must be able to access the weborder system via a web browser with HTTPS.
+Triggers:
+Sales Person clicks the button or link to "Update Product Attributes"
+Basic Scenario:
+1. Sales Person clicks the button or link to initiate Update Product Attributes process.
+2. System prompts the Sales Person to select a product by searching or viewing a list of products.
+3. System displays all of the product attributes and allows Sales Person to update the product name, product id, product description, product price, update the product
+image, product availability, and/or the number of items in the inventory.
+4. System validates the product information.
+5. System updates the product page and product information within the system.
+6. System displays the newly updated product page.
+Postconditions:
+The product attributes have been changed.
+
+Reference Response:
+@startuml
+title Update Product Attributes
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Update Product Attributes"
+activate System
+System -> SalesPerson : Prompt to select a product (search or list)
+SalesPerson -> System : Select a product
+System -> SalesPerson : Display product attributes
+SalesPerson -> System : Update product name, id, description, price, image, availability, or inventory
+System -> System : Validate product information
+System -> System : Update product page and information
+System -> SalesPerson : Display newly updated product page
+deactivate System
+@enduml

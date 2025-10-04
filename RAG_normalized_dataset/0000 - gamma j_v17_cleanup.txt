@@ -1,0 +1,66 @@
+**Title:** Logout Sales Person – Logout Process
+
+**Raw:**
+
+Requirements:  
+Logout Sales Person
+
+Goal:  
+Logout the Sales Person account on the system.
+
+Actors:  
+Sales Person  
+Weborder System
+
+Preconditions:  
+Sales Person must be logged-in on the system.
+
+Triggers:  
+Sales Person clicks button or link to “Logout”
+
+Basic Scenario:  
+1. Sales Person clicks the button or link to initiate logout process.  
+2. System terminates the session cookie.  
+3. System displays home page.
+
+Alternative Scenario:  
+None
+
+Postconditions:  
+The Sales Person is logged out of the system.
+
+---
+
+**Clean:**  
+**Actors:** Sales Person, Weborder System  
+**Preconditions:** Sales Person is already logged in.  
+**Triggers:** Sales Person clicks the **Logout** button or link.
+
+**Flow:**  
+1. Sales Person → Weborder System: Click “Logout”  
+2. Weborder System → Weborder System: Terminate session cookie  
+3. Weborder System → Sales Person: Display home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Sales Person session is terminated and the home page is displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Logout Sales Person
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Logout"
+activate System
+System -> System : Terminate session cookie
+System -> SalesPerson : Display home page
+deactivate System
+
+@enduml

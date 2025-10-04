@@ -1,0 +1,137 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 01 – Check driver(s)’ issued cards
+Description This use case consists of processing a request for checking driver’s issued card
+coming from a Card Issuing Authority (CIA). Such request could contain the data for
+a single driver (online mode) or several drivers (batch mode).
+This use case is also used by enforcers (on behalf of CIA – as TACHOnet only sees
+CIA as SPOC) during road checks.
+Basic flow The basic flow consists of the following steps:
+Step Action
+1 TACHOnet deciphers the received request and logs the received request
+as-is in its tracking database.
+2 TACHOnet validates its syntax and assigns it a TACHOnet refid
+(TCNRefId).
+3 TACHOnet will build as many new requests as issuing Member State
+codes identified in the original request (+ another one for all subrequests
+not mentioning any issuing Member State code) by applying
+defined name encoding rules to the given surname(s) and first name(s) in
+order to compute the search keys.
+4 For each issuing Member State identified (if any) in the original request,
+TACHOnet builds, logs and encrypts a new request (only containing
+sub-requests for the corresponding issuing Member State), sends it to the
+corresponding Member State’s CIA application and waits for receiving
+the response.
+For the sub-request mentioning any issuing Member State code (if any),
+TACHOnet builds, logs and encrypts a new request (only containing
+sub-requests not mentioning any issuing Member State), broadcasts it to
+all the Member States configured in TACHOnet (except the Member
+State having sent the original request) and waits for receiving each
+response.
+5 For each received response, TACHOnet deciphers it, logs it as-is in its
+tracking database and validates its syntax. If it is valid, TACHOnet
+stores the response data (linked to the TCN refid) in the database (for
+later building the single consolidated response that TACHOnet will send
+when all responses are received or when the timeout is reached).
+6 When all responses are received or when the timeout is reached,
+TACHOnet builds, from the received responses stored in its database,
+the single consolidated response.
+7 TACHOnet logs the consolidated response is in its tracking database,
+encrypts it and sends it to the original caller.
+
+Alternate flows Several alternate flows may exist depending on the result of some events/actions of
+the basic flow:
+ALT-01 When TACHOnet receives a negative response from a Member State
+CIA, it should log it and consider the request sent to that Member
+State CIA as completed (with error).
+ALT-02 When TACHOnet receives multiple responses (corresponding to a
+single request) from a Member State CIA, it should ignore the
+superfluous additional responses. The first received response is the
+processed one.
+ALT-03 When TACHOnet doesn’t receive within time a Member State CIA
+response, it should mention ‘timeout’ as status code for that Member
+State CIA in the consolidated response.
+ALT-04 When TACHOnet receives a late Member State CIA response, it
+should log it and ignore it.
+ALT-05 When TACHOnet receives a syntactically invalid request / response,
+it should always send back a negative receipt with ‘Invalid Format
+request’ as status code and warn the TCN Administrator.
+ALT-06 When TACHOnet receives an invalid XML message (request,
+response), it will respond with a negative receipt mentioning the
+reason (invalid format).
+
+Reference Response:
+@startuml
+title Use Case 01 – Check driver(s)’ issued cards
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+participant "Member State CIA" as MemberCIA
+database "TACHOnet Tracking Database" as DB
+participant "TCN Administrator" as Admin
+
+CIA -> TACHOnet : Send request (Single/Batch)
+activate TACHOnet
+
+TACHOnet -> TACHOnet : Decipher request
+TACHOnet -> DB : Log received request as-is
+
+alt Invalid request format
+    TACHOnet -> CIA : Send negative receipt (Invalid Format)
+    TACHOnet -> Admin : Warn TCN Administrator
+end
+
+TACHOnet -> TACHOnet : Validate syntax
+
+alt Invalid XML message
+    TACHOnet -> CIA : Send negative receipt (Invalid XML)
+end
+
+TACHOnet -> TACHOnet : Assign TCNRefId
+TACHOnet -> TACHOnet : Build sub-requests (by Member State codes or broadcast)
+TACHOnet -> DB : Log sub-requests
+
+alt Sub-request for specific Member State
+    TACHOnet -> MemberCIA : Send encrypted request (Single Member State)
+    activate MemberCIA
+    MemberCIA -> TACHOnet : Return response
+    deactivate MemberCIA
+else Broadcast to all Member States
+    TACHOnet -> MemberCIA : Send encrypted request (All Member States except sender)
+    loop Wait for all responses
+        activate MemberCIA
+        MemberCIA -> TACHOnet : Return response
+        deactivate MemberCIA
+    end
+end
+
+loop Process received responses
+    TACHOnet -> TACHOnet : Decipher response
+    alt Nomal case
+        TACHOnet -> DB : Log response as-is
+    else Negative response from Member State (ALT-01)
+        TACHOnet -> DB : Log response with error status
+    else Multiple responses from Member State (ALT-02)
+        TACHOnet -> TACHOnet : Ignore superfluous responses
+    else No response within timeout (ALT-03)
+        TACHOnet -> TACHOnet : Mark timeout status in consolidated response
+    else Late response (ALT-04)
+        TACHOnet -> DB : Log late response
+        TACHOnet -> TACHOnet : Ignore late response
+    else Invalid response format (ALT-05)
+        TACHOnet -> MemberCIA : Send negative receipt (Invalid Format)
+        TACHOnet -> Admin : Warn TCN Administrator
+   else Invalid XML message (ALT-06)
+        TACHOnet -> MemberCIA : Send negative receipt (Invalid XML)
+    end
+end
+
+alt All responses received or timeout reached
+    TACHOnet -> TACHOnet : Build single consolidated response
+    TACHOnet -> DB : Log consolidated response
+    TACHOnet -> CIA : Send encrypted consolidated response
+end
+
+deactivate TACHOnet
+@enduml

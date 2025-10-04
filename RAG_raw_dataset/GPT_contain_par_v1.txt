@@ -1,0 +1,58 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: Self-Driving Car Emergency Response
+
+## Goal
+Ensure that when a self-driving car detects an obstacle, it can simultaneously engage emergency braking and compute a new route to safely navigate around the obstacle.
+
+## Actors
+- **Autonomous Vehicle (AV):** Detects obstacles and initiates the emergency response.
+- **Vehicle Control Unit (VCU):** Analyzes the situation and coordinates safety and navigation actions.
+- **Safety System (SS):** Responsible for engaging emergency braking.
+- **Navigation System (NS):** Calculates an alternative route.
+
+## Preconditions
+- The autonomous vehicle is operating and its sensors detect an obstacle.
+- The Safety System and Navigation System are active and responsive.
+
+## Triggers
+- An obstacle is detected by the vehicle’s sensor suite.
+
+## Scenario
+1. The Autonomous Vehicle detects an obstacle and notifies the VCU.
+2. The VCU analyzes the situation and simultaneously initiates two parallel interactions:
+   - **Interaction 1:** Sends a command to the Safety System to engage emergency braking.
+   - **Interaction 2:** Requests a new route from the Navigation System.
+3. The Safety System engages emergency braking, and the Navigation System computes a new route concurrently.
+4. Once both actions complete, the VCU updates the vehicle’s status (indicating braking is active and a new route is available) and logs the event.
+
+
+Reference Response:
+@startuml
+title Self-Driving Car Emergency Respons
+actor "Autonomous Vehicle" as AV
+participant "Vehicle Control Unit" as VCU
+participant "Safety System" as SS
+participant "Navigation System" as NS
+
+AV -> VCU: Detect Obstacle
+activate VCU
+VCU -> VCU: Analyze Situation
+
+par Emergency Braking
+    VCU -> SS: Initiate Emergency Braking
+    activate SS
+    SS --> VCU: Braking Engaged
+    deactivate SS
+else Rerouting
+    VCU -> NS: Request New Route
+    activate NS
+    NS --> VCU: New Route Calculated
+    deactivate NS
+end
+
+VCU -> AV: Update Status (Braking & New Route)
+VCU -> VCU: Log Emergency Event
+deactivate VCU
+@enduml

@@ -1,0 +1,76 @@
+**Title:** Update Product Attributes – Attribute Update Process
+
+**Raw:**
+
+Requirements:  
+Update Product Attributes
+
+Goal:  
+Update Product attributes within the system.
+
+Actors:  
+Sales Person  
+Weborder System
+
+Preconditions:  
+Sales Person must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Sales Person clicks the button or link to “Update Product Attributes”
+
+Basic Scenario:  
+1. Sales Person clicks the button or link to initiate Update Product Attributes process.  
+2. System prompts the Sales Person to select a product by searching or viewing a list of products.  
+3. System displays all of the product attributes and allows Sales Person to update the product name, product id, product description, product price, update the product image, product availability, and/or the number of items in the inventory.  
+4. System validates the product information.  
+5. System updates the product page and product information within the system.  
+6. System displays the newly updated product page.
+
+Postconditions:  
+The product attributes have been changed.
+
+---
+
+**Clean:**  
+**Actors:** Sales Person, Weborder System  
+**Preconditions:** Sales Person can access the Weborder System via HTTPS.  
+**Triggers:** Sales Person clicks the **Update Product Attributes** button or link.  
+
+**Flow:**  
+1. Sales Person → Weborder System: Click “Update Product Attributes”  
+2. Weborder System → Sales Person: Prompt to select a product (search or list)  
+3. Sales Person → Weborder System: Select product  
+4. Weborder System → Sales Person: Display current product attributes (name, id, description, price, image, availability, inventory)  
+5. Sales Person → Weborder System: Submit updated attributes  
+6. Weborder System → Weborder System: Validate product information  
+7. Weborder System → Weborder System: Update product page and information  
+8. Weborder System → Sales Person: Display newly updated product page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Product page and attributes are updated and displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Update Product Attributes
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Update Product Attributes"
+activate System
+System -> SalesPerson : Prompt to select a product (search or list)
+SalesPerson -> System : Select product
+System -> SalesPerson : Display current product attributes
+SalesPerson -> System : Update product name, id, description, price, image, availability, inventory
+System -> System : Validate product information
+System -> System : Update product page and information
+System -> SalesPerson : Display newly updated product page
+deactivate System
+
+@enduml

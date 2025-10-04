@@ -1,0 +1,73 @@
+**Title:** Use Case 05 – Get Phonex Search Keys
+
+**Raw:**
+
+Requirements:  
+Use Case 05 – Get Phonex Search Keys  
+Description: This use case consists of getting from TACHOnet the computed search keys (based on the Phonex algorithm) corresponding to the given last name and first names. The Member State CIAs call this service when issuing a new card to get the search keys to store locally. When checking issued cards, they use these keys (and birth date) to query their store. Member States may use their own phonetic algorithm if desired.
+
+Basic flow:  
+1. CIA calls TACHOnet service with driver’s surname and first names.  
+2. TACHOnet validates input parameters.  
+3. If valid, TACHOnet computes Phonex search keys.  
+4. TACHOnet returns computed search keys.
+
+Alternate flow:  
+- **Invalid input:** TACHOnet returns negative status code.
+
+Special requirements:  
+- Should be a synchronous Web Service.  
+- Provide a web interface for manual access.  
+- Provide downloadable .NET and Java implementations.
+
+Preconditions:  
+Caller must supply mandatory input parameters.
+
+Postconditions:  
+Caller receives computed search keys or a negative error code.
+
+Actors:  
+CIA (Card Issuing Authority) or enforcer via CIA, TACHOnet system
+
+---
+
+**Clean:**  
+**Actors:** CIA, TACHOnet  
+**Preconditions:** Caller has valid driver surname and first names.  
+**Triggers:** CIA invokes “Get Phonex Search Keys” service.
+
+**Flow:**  
+1. CIA → TACHOnet: Send request(driver’s surname, first names)  
+2. TACHOnet → TACHOnet: Validate input parameters  
+3. alt Valid input  
+   3.1 TACHOnet → TACHOnet: Compute Phonex search keys  
+   3.2 TACHOnet → CIA: Return computed search keys  
+   else Invalid input  
+   3.1 TACHOnet → CIA: Return negative status code  
+end  
+
+**Postconditions:** CIA receives search keys or error code.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Use Case 05 – Get Phonex Search Keys
+
+actor "Card Issuing Authority" as CIA
+participant TACHOnet
+
+CIA -> TACHOnet : Send request (surname, first names)
+activate TACHOnet
+
+TACHOnet -> TACHOnet : Validate input parameters
+alt Valid input
+    TACHOnet -> TACHOnet : Compute Phonex search keys
+    TACHOnet -> CIA : Return computed search keys
+else Invalid input
+    TACHOnet -> CIA : Return negative status code
+end
+
+deactivate TACHOnet
+@enduml

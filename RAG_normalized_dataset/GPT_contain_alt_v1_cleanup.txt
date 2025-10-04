@@ -1,0 +1,128 @@
+**Title:** Product Return and Refund – Return Process
+
+**Raw:**
+
+# Requirements: Product Return and Refund
+
+## Goal  
+Allow a customer to request a product return and manage different outcomes depending on the return policy, product condition, and timing.
+
+## Actors  
+- **Customer (C)**: Initiates the return request.  
+- **E-commerce System (ES)**: Manages the return process and checks policies.  
+- **Warehouse (W)**: Receives the returned product if approved.  
+- **Payment Gateway (PG)**: Processes refunds when required.
+
+## Preconditions  
+- The customer has an order history in the system.  
+- The product was purchased within the return window (e.g., 30 days), though this must be verified.  
+- The warehouse is capable of receiving returns.
+
+## Triggers  
+The customer initiates a “Return Product” request through their order history page.
+
+## Basic Scenario – Eligible for Return  
+1. Customer requests to return a product.  
+2. E-commerce System checks eligibility (return window, order status, etc.).  
+3. E-commerce System prompts customer to confirm reason for return.  
+4. **If reason is valid** (e.g., defective):  
+   - ES authorizes return and sends shipping label.  
+5. **If reason is invalid** (e.g., “changed mind” after window):  
+   - ES authorizes return with a restocking fee.  
+6. Customer ships product back to Warehouse.  
+7. Warehouse notifies ES upon receipt.  
+8. ES inspects product condition:  
+   - **Acceptable:** Issue refund via PG.  
+   - **Damaged/Missing parts:** Deny or issue partial refund.  
+9. ES notifies customer of final outcome.
+
+## Alternative Flow A – Not Eligible for Return  
+1. Customer requests return (step 1).  
+2. ES checks eligibility (step 2).  
+3. ES denies request, explaining policy reason.  
+4. Customer can contact support or accept denial.
+
+---
+
+**Clean:**  
+**Actors:** Customer (C), E-commerce System (ES), Warehouse (W), Payment Gateway (PG)  
+**Preconditions:** Order history exists; product within return window; warehouse able to receive returns.  
+**Triggers:** C clicks “Return Product” in order history.
+
+**Flow:**  
+1. C → ES: Request return for product  
+2. ES → ES: Check return eligibility  
+3. ES → C: Prompt for return reason  
+
+4. alt Reason valid  
+   - ES → C: Authorize return & provide shipping label  
+   else Reason invalid  
+   - ES → C: Authorize return with restocking fee  
+   end  
+
+5. C → W: Ship product back  
+6. W → ES: Notify product received  
+7. ES → ES: Inspect product condition  
+
+8. alt Acceptable condition  
+   - ES → PG: Issue refund  
+   - PG --> ES: Refund confirmed  
+   - ES → C: Notify full refund  
+   else Damaged/Missing parts  
+   - ES → C: Notify partial refund or denial  
+   end  
+
+**Alternative Scenario – Not Eligible:**  
+1. C → ES: Request return  
+2. ES → ES: Check eligibility  
+3. ES → C: Return request denied (explain policy)  
+4. C → ES: Contact support or accept denial  
+
+**Postconditions:** Customer notified of full refund, partial refund, or denial; warehouse and payment actions completed as applicable.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Product Return and Refund
+
+actor "Customer" as C
+participant "E-commerce System" as ES
+participant "Warehouse" as W
+participant "Payment Gateway" as PG
+
+C -> ES: Request Return for Product
+activate ES
+ES -> ES: Check Return Eligibility
+
+alt Eligible for Return
+  ES -> C: Prompt for return reason
+  alt Reason is valid (e.g., defective)
+    ES -> C: Authorize return, provide shipping label
+  else Reason is invalid or changed mind
+    ES -> C: Authorize return with restocking fee
+  end
+
+  C -> W: Ship product back
+  activate W
+  W -> ES: Notify product received
+  deactivate W
+
+  ES -> ES: Inspect product condition
+  alt Product in acceptable condition
+    ES -> PG: Issue Refund
+    activate PG
+    PG --> ES: Refund Confirmed
+    deactivate PG
+    ES -> C: Notify Full Refund
+  else Product damaged or incomplete
+    ES -> C: Partial refund or denial
+  end
+
+else Not Eligible for Return
+  ES -> C: Return Request Denied
+end
+
+deactivate ES
+@enduml

@@ -1,0 +1,41 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Add Product
+Goal:
+Add a product to the system.
+Actors:
+Sales Person
+Weborder System
+Preconditions:
+Sales Person must be able to access the weborder system via a web browser with HTTPS.
+Triggers:
+Sales Person clicks the button or link to "Add Product"
+Basic Scenario:
+1. Sales Person clicks the button or link to initiate Add Product process.
+2. System prompts the Sales Person to fill out product name, product id, product
+description, product price, upload a product image, number of items in inventory, and
+availability of product.
+3. System validates the new product information.
+4. System creates a new product page for the new product.
+5. System displays the newly created product page.
+Postconditions:
+A new product is created within the system.
+
+Reference Response:
+@startuml
+title Add Product
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Add Product"
+activate System
+System -> SalesPerson : Prompt to fill out product details
+SalesPerson -> System : Provide product name, id, description, price, image, inventory, and availability
+System -> System : Validate product information
+System -> System : Create new product page
+System -> SalesPerson : Display newly created product page
+deactivate System
+
+@enduml

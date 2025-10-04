@@ -1,0 +1,37 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Install Plug-ins
+Goal:
+Install a new plug-in to the application.
+Actors:
+Administrator
+Weborder System
+Preconditions:
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+Triggers:
+Administrator clicks the button or link to "Install Plug-ins "
+Basic Scenario:
+1. Administrator clicks the button or link to initiate Plug-in installation process.
+2. System prompts the Administrator to upload the Plug-in module.
+3. System installs plug-in and validates changes.
+4. System displays plug-in options to the Administrator.
+Postconditions:
+A new plug-in is installed in the application.
+
+Reference Response:
+@startuml
+title Install Plug-ins
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Install Plug-ins"
+activate System
+System -> Administrator : Prompt to upload Plug-in module
+Administrator -> System : Upload Plug-in module
+System -> System : Install and validate Plug-in
+System -> Administrator : Display Plug-in options
+deactivate System
+
+@enduml

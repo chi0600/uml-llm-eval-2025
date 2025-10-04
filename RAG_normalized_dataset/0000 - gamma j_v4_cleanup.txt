@@ -1,0 +1,66 @@
+**Title:** Logout Customer – Logout Process
+
+**Raw:**  
+
+Requirements:  
+Logout Customer
+
+Goal:  
+Logout the customer account on the system.
+
+Actors:  
+Customer  
+Weborder System
+
+Preconditions:  
+Customer must be logged-in on the system.
+
+Triggers:  
+Customer clicks on the button or link to “Logout”
+
+Basic Scenario:  
+1. Customer clicks the button or link in order to initiate logout process.  
+2. System terminates the session cookie.  
+3. System displays the home page.
+
+Alternative Scenario:  
+None
+
+Postconditions:  
+The Customer is logged out of the system.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer is already logged in to the system.  
+**Triggers:** Customer clicks the **Logout** button or link.  
+
+**Flow:**  
+1. Customer → Weborder System: Click “Logout”  
+2. Weborder System → Weborder System: Terminate session cookie  
+3. Weborder System → Customer: Display home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Customer session is terminated and the home page is displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Customer Logout Process
+
+actor Customer
+participant "Weborder System" as WeborderSystem
+
+Customer -> WeborderSystem : Click "Logout"
+activate WeborderSystem
+WeborderSystem -> WeborderSystem : Terminate cookie
+WeborderSystem -> Customer : Display home page
+deactivate WeborderSystem
+
+@enduml

@@ -1,0 +1,36 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Logout Customer
+Goal:
+Logout the customer account on the system.
+Actors:
+Customer
+Weborder System
+Preconditions:
+Customer must be logged-in on the system.
+Triggers:
+Customer clicks button or link to "Logout"
+Basic Scenario:
+1. Customer clicks button or link to initiate logout process.
+2. System terminates the session cookie.
+3. System displays home page.
+Alternative Scenario:
+None
+Postconditions:
+The Customer is logged out of the system.
+
+Reference Response:
+@startuml
+title Logout Customer
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Logout"
+activate System
+System -> System : Terminate session cookie
+System -> Customer : Display home page
+deactivate System
+
+@enduml

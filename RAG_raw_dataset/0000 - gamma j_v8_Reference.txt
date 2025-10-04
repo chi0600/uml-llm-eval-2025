@@ -1,0 +1,35 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Logout Administrator
+Goal:
+Logout the Administrator account on the system.
+Actors:
+Administrator
+Weborder System
+Preconditions:
+Administrator must be logged-in on the system.
+Triggers:
+Administrator clicks button or link to "Logout"
+Basic Scenario:
+1. Administrator clicks button or link to initiate logout process.
+2. System terminates the session cookie.
+3. System displays home page.
+Alternative Scenario:
+None
+Postconditions:
+The Administrator is logged out of the system.
+
+Reference Response:
+@startuml
+title Logout Administrator
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Logout"
+activate System
+System -> System : Terminate session cookie
+System -> Administrator : Display home page
+deactivate System
+@enduml

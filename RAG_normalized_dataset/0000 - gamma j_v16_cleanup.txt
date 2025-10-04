@@ -1,0 +1,94 @@
+**Title:** Login Sales Person – Login Process
+
+**Raw:**
+
+Requirements:  
+Login Sales Person
+
+Goal:  
+Login to an account with the system.
+
+Actors:  
+Sales Person  
+Weborder System
+
+Preconditions:  
+Sales Person account must already be registered.
+
+Triggers:  
+Sales Person clicks button or link to “Login”
+
+Basic Scenario:  
+1. Sales Person clicks button or link to initiate login process.  
+2. System prompts the Sales Person for email and password.  
+3. System verifies the information.  
+4. System creates session cookie.  
+5. System displays the account home page to Sales Person.
+
+Alternative Scenario:  
+A1. System recognizes Sales Person’s cookie.  
+A2. Go to Step 5 (Basic Scenario).  
+B1. Sales Person enters incorrect login information.  
+B2. System prompts the Sales Person to resend login details to email account.  
+B3. Sales Person confirms.  
+B4. System sends email to registered email address.  
+B5. Go to Step 1 (Basic Scenario).
+
+Postconditions:  
+The Sales Person is logged into the system.
+
+---
+
+**Clean:**  
+**Actors:** Sales Person, Weborder System  
+**Preconditions:** Sales Person account is already registered.  
+**Triggers:** Sales Person clicks the **Login** button or link.  
+
+**Basic Flow:**  
+1. Sales Person → Weborder System: Click “Login”  
+2. Weborder System → Sales Person: Prompt for email and password  
+3. Sales Person → Weborder System: Enter email and password  
+4. Weborder System → Weborder System: Verify information  
+5. Weborder System → Weborder System: Create session cookie  
+6. Weborder System → Sales Person: Display account home page  
+
+**Alternative Scenarios:**  
+- **Recognized cookie:** Weborder System → Sales Person: Display account home page (skip to step 6).  
+- **Incorrect credentials:**  
+  1. Weborder System → Sales Person: Prompt to resend login details  
+  2. Sales Person → Weborder System: Confirm resend  
+  3. Weborder System → Sales Person: Send email to registered address  
+  4. (Return to Basic Flow step 1)
+
+**Postconditions:**  
+Sales Person is logged into the system.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Login Sales Person
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Login"
+activate System
+alt Recognizes cookie
+    System -> SalesPerson : Display account home page
+else Requires login details
+    System -> SalesPerson : Prompt for email and password
+    SalesPerson -> System : Enter email and password
+    alt Information verified
+        System -> System : Create session cookie
+        System -> SalesPerson : Display account home page
+    else Incorrect login details
+        System -> SalesPerson : Prompt to resend login details to email
+        SalesPerson -> System : Confirm resend
+        System -> SalesPerson : Send email to registered email address
+        SalesPerson -> System : Click "Login" and start again login process
+    end
+end
+deactivate System
+@enduml

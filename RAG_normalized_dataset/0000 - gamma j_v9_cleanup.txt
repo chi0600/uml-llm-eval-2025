@@ -1,0 +1,71 @@
+**Title:** Add User – Add User Process
+
+**Raw:**
+
+Requirements:  
+Add User
+
+Goal:  
+Register a new customer, sales person, or administrator account with the system.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Administrator clicks button or link to “Add Users”
+
+Basic Scenario:  
+1. Administrator clicks the button or link to initiate Add User process.  
+2. System prompts the Administrator to fill out first name, last name, username, email address, password, and privileges of the user.  
+3. System validates new user information.  
+4. System creates a new account for the new user with desired privileges.  
+5. System displays account home page to Administrator.
+
+Postconditions:  
+A new user account is created within the system.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator can access the Weborder System via HTTPS.  
+**Triggers:** Administrator clicks the **Add Users** button or link.  
+
+**Flow:**  
+1. Administrator → Weborder System: Click “Add Users”  
+2. Weborder System → Administrator: Prompt for user details (first name, last name, username, email, password, privileges)  
+3. Administrator → Weborder System: Submit new user details  
+4. Weborder System → Weborder System: Validate user information  
+5. Weborder System → Weborder System: Create new account with specified privileges  
+6. Weborder System → Administrator: Display account home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+New user account exists with the requested privileges.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Add User
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Add Users"
+activate System
+System -> Administrator : Prompt to fill user details
+Administrator -> System : Enter first name, last name, username, email, password, and privileges
+System -> System : Validate new user information
+System -> System : Create new account with privileges
+System -> Administrator : Display account home page
+deactivate System
+
+@enduml

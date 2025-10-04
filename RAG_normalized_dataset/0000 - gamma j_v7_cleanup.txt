@@ -1,0 +1,99 @@
+**Title:** Login Administrator – Login Process
+
+**Raw:**
+
+Requirements:  
+Login Administrator
+
+Goal:  
+Login to an Administrator account with the system.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator account must already be registered.
+
+Triggers:  
+Administrator clicks button or link to “Login”
+
+Basic Scenario:  
+1. Administrator clicks button or link to initiate login process.  
+2. System prompts the Administrator for email and password.  
+3. Administrator enters email and password.  
+4. System verifies information.  
+5. System creates session cookie.  
+6. System displays account home page to Administrator.
+
+Alternative Scenario:  
+A1. System recognizes Administrator’s cookie.  
+A2. Go to Step 6 (Basic Scenario).  
+B1. Administrator enters incorrect login information.  
+B2. System prompts Administrator to resend login details to email account.  
+B3. Administrator confirms resend.  
+B4. System sends email to registered email address.  
+B5. Go to Step 1 (Basic Scenario).
+
+Postconditions:  
+The Administrator is logged into the system.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator account is already registered.  
+**Triggers:** Administrator clicks the **Login** button or link.
+
+**Basic Flow:**  
+1. Administrator → Weborder System: Click “Login”  
+2. Weborder System → Administrator: Prompt for email and password  
+3. Administrator → Weborder System: Enter email and password  
+4. Weborder System → Weborder System: Verify information  
+5. Weborder System → Weborder System: Create session cookie  
+6. Weborder System → Administrator: Display account home page  
+
+**Alternative Scenarios:**  
+- **Recognized cookie:** Weborder System → Administrator: Display account home page (skip to step 6).  
+- **Incorrect credentials:**  
+  1. Administrator → Weborder System: Enter incorrect email/password  
+  2. Weborder System → Administrator: Prompt to resend login details  
+  3. Administrator → Weborder System: Confirm resend  
+  4. Weborder System → Weborder System: Send email to registered address  
+  5. (Return to Basic Flow step 1)
+
+**Postconditions:**  
+Administrator is logged into the system.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Login Administrator
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Login"
+activate System
+System -> Administrator : Prompt for email and password
+Administrator -> System : Enter email and password
+System -> System : Verify information
+
+alt Valid login
+    System -> System : Create session cookie
+    System -> Administrator : Display account home page
+else Recognized cookie
+    System -> Administrator : Display account home page
+else Incorrect login
+    System -> Administrator : Prompt to resend login details
+    deactivate System
+    Administrator -> System : Confirm resend
+    activate System
+    System -> System : Send email to registered email address
+    System -> Administrator : Prompt for email and password
+end
+
+deactivate System
+@enduml

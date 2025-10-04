@@ -1,0 +1,83 @@
+**Title:** Register Customer – Registration Process
+
+**Raw:**
+
+Requirements:  
+Register Customer
+
+Goal:  
+Register a new customer account with the system.
+
+Actors:  
+Customer  
+Weborder System
+
+Preconditions:  
+Customer must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Customer clicks the button or link to “Register”
+
+Basic Scenario:  
+1. Customer clicks the button or link to initiate registration process.  
+2. System prompts the customer to fill out first name, last name, billing address, shipping address, email address, and password.  
+3. Customer enters fields.  
+4. System validates customer's information.  
+5. System creates a new account for the Customer.  
+6. System creates session cookie.  
+7. System displays account home page to Customer.
+
+Alternative Scenario:  
+A1. System recognizes Customer’s cookie.  
+A2. Go to Step 7 (Basic Scenario).
+
+Postconditions:  
+The Customer registers and creates a new customer account with the system.
+
+---
+
+**Clean:**  
+**Actors:** Customer, Weborder System  
+**Preconditions:** Customer can access the Weborder System via HTTPS in a browser.  
+**Triggers:** Customer clicks the **Register** button or link.  
+
+**Flow:**  
+1. Customer → Weborder System: Click “Register”  
+2. Weborder System → Customer: Prompt for registration fields (first name, last name, billing address, shipping address, email, password)  
+3. Customer → Weborder System: Submit registration fields  
+4. Weborder System → Weborder System: Validate customer information  
+5. Weborder System → Weborder System: Create new customer account  
+6. Weborder System → Weborder System: Create session cookie  
+7. Weborder System → Customer: Display account home page  
+
+**Alternative Scenario (Recognized Cookie):**  
+- Weborder System → Customer: Display account home page (skip to step 7)
+
+**Postconditions:**  
+Customer account is created and session cookie is active.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Register Customer
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Register"
+activate System
+alt Recognizes customer's cookie
+    System -> Customer : Display account home page
+else Requires registration
+    System -> Customer : Prompt to fill out registration fields (name, address, email, password)
+    Customer -> System : Enter registration fields
+    System -> System : Validate customer's information
+    System -> System : Create new account
+    System -> System : Create session cookie
+    System -> Customer : Display account home page
+end
+deactivate System
+
+@enduml

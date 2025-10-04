@@ -1,0 +1,66 @@
+**Title:** Logout Administrator – Logout Process
+
+**Raw:**
+
+Requirements:  
+Logout Administrator
+
+Goal:  
+Logout the Administrator account on the system.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator must be logged-in on the system.
+
+Triggers:  
+Administrator clicks button or link to “Logout”
+
+Basic Scenario:  
+1. Administrator clicks button or link to initiate logout process.  
+2. System terminates the session cookie.  
+3. System displays home page.
+
+Alternative Scenario:  
+None
+
+Postconditions:  
+The Administrator is logged out of the system.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator is already logged in.  
+**Triggers:** Administrator clicks the **Logout** button or link.  
+
+**Flow:**  
+1. Administrator → Weborder System: Click “Logout”  
+2. Weborder System → Weborder System: Terminate session cookie  
+3. Weborder System → Administrator: Display home page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Administrator session is terminated and home page is displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Logout Administrator
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Logout"
+activate System
+System -> System : Terminate session cookie
+System -> Administrator : Display home page
+deactivate System
+
+@enduml

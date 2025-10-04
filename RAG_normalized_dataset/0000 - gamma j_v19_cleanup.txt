@@ -1,0 +1,70 @@
+**Title:** Remove Product – Removal Process
+
+**Raw:**
+
+Requirements:  
+Remove Product
+
+Goal:  
+Remove a product from the system.
+
+Actors:  
+Sales Person  
+Weborder System
+
+Preconditions:  
+Sales Person must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Sales Person clicks the button or link to “Remove Product”
+
+Basic Scenario:  
+1. Sales Person clicks the button or link to initiate Remove Product process.  
+2. System prompts the Sales Person to select a product by searching or viewing a list of products.  
+3. System validates the product information.  
+4. System removes the product page and product information from the system.  
+5. System displays confirmation or updated product page.
+
+Postconditions:  
+A product is deleted from the system.
+
+---
+
+**Clean:**  
+**Actors:** Sales Person, Weborder System  
+**Preconditions:** Sales Person can access the Weborder System via HTTPS.  
+**Triggers:** Sales Person clicks the **Remove Product** button or link.  
+
+**Flow:**  
+1. Sales Person → Weborder System: Click “Remove Product”  
+2. Weborder System → Sales Person: Prompt to select a product (search or list)  
+3. Sales Person → Weborder System: Select product  
+4. Weborder System → Weborder System: Validate product information  
+5. Weborder System → Weborder System: Remove product page and information  
+6. Weborder System → Sales Person: Display confirmation or updated product page  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Product is removed and confirmation or updated product page is displayed.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Remove Product
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Remove Product"
+activate System
+System -> SalesPerson : Prompt to select a product (search or list)
+SalesPerson -> System : Select product
+System -> System : Validate product information
+System -> System : Remove product page and information
+System -> SalesPerson : Display confirmation or updated product page
+deactivate System
+@enduml

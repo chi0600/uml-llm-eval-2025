@@ -1,0 +1,45 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: User Login
+
+## Goal
+Allow a user to log into the system with email and password.
+
+## Actors
+- **User**
+- **Web System**
+
+## Preconditions
+- User must already have an account registered.
+
+## Triggers
+- User clicks the "Login" button or link.
+
+## Basic Scenario
+1. User clicks "Login."
+2. Web System requests email and password.
+3. User provides credentials.
+4. Web System verifies credentials.
+5. Web System creates a session.
+6. User is shown the dashboard.
+
+Reference Response:
+@startuml
+title User Login
+
+actor User
+participant "Web System" as System
+
+User -> System: Click "Login"
+activate System
+
+System -> User: Request email & password
+User -> System: Provide credentials
+
+System -> System: Verify credentials
+System -> System: Create session
+
+System -> User: Display dashboard
+deactivate System
+@enduml

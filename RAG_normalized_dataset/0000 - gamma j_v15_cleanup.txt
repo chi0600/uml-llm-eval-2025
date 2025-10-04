@@ -1,0 +1,68 @@
+**Title:** Install Patch Process – Patch Installation
+
+**Raw:**
+
+Requirements:  
+Install patch process
+
+Goal:  
+Install patches or software updates to the web store.
+
+Actors:  
+Administrator  
+Weborder System
+
+Preconditions:  
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:  
+Administrator clicks the button or link to “Install Patch”
+
+Basic Scenario:  
+1. Administrator clicks the button or link to initiate patching process.  
+2. System prompts the Administrator to upload the patch.  
+3. System automatically installs patches and reinitializes software.  
+4. System confirms that patch has been successfully installed.
+
+Postconditions:  
+The web store was successfully updated.
+
+---
+
+**Clean:**  
+**Actors:** Administrator, Weborder System  
+**Preconditions:** Administrator can access the Weborder System via HTTPS.  
+**Triggers:** Administrator clicks the **Install Patch** button or link.
+
+**Flow:**  
+1. Administrator → Weborder System: Click “Install Patch”  
+2. Weborder System → Administrator: Prompt to upload patch  
+3. Administrator → Weborder System: Upload patch  
+4. Weborder System → Weborder System: Install patch and reinitialize software  
+5. Weborder System → Administrator: Confirm successful installation  
+
+**Alternative Scenarios:**  
+- None
+
+**Postconditions:**  
+Web store is updated with the new patch installed successfully.
+
+---
+
+**PlantUML:**  
+```plantuml
+@startuml
+title Install Patch Process
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Install Patch"
+activate System
+System -> Administrator : Prompt to upload patch
+Administrator -> System : Upload patch
+System -> System : Install patch and reinitialize software
+System -> Administrator : Confirm successful installation
+deactivate System
+
+@enduml

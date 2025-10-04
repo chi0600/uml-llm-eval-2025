@@ -1,0 +1,59 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Login Administrator
+Goal:
+Login to an Administrator account with the system.
+Actors:
+Administrator
+Weborder System
+Preconditions:
+Administrator account must already be registered.
+Triggers:
+Administrator clicks button or link to "Login"
+Basic Scenario:
+1. Administrator clicks button or link to initiate login process.
+2. System prompts the Administrator for email and password.
+3. System verifies information.
+4. System creates session cookie.
+5. System displays account home page to Administrator
+Alternative Scenario:
+A1. System recognizes Administrator 's cookie
+A2. Go to Step 5 (Basic Scenario).
+B1. Administrator enters incorrect login information.
+B2. System prompts Administrator to resend login details to email account.
+B3. Administrator confirms.
+B4. System sends email to registered email address.
+B5. Go to Step 1 (Basic Scenario).
+Postconditions:
+The Administrator is logged into the system.
+
+Reference Response:
+@startuml
+title Login Administrator
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Login"
+activate System
+System -> Administrator : Prompt for email and password
+Administrator -> System : Enter email and password
+System -> System : Verify information
+
+alt Valid login
+    System -> System : Create session cookie
+    System -> Administrator : Display account home page
+else Recognized cookie
+    System -> Administrator : Display account home page
+else Incorrect login
+    System -> Administrator : Prompt to resend login details
+    deactivate System
+    Administrator -> System : Confirm resend
+    activate System
+    System -> Administrator : Send email to registered email address
+    deactivate System
+    note right of Administrator : Returns to Step 1
+end
+
+@enduml

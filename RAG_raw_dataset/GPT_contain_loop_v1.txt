@@ -1,0 +1,60 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+# Requirements: Generate Order Summaries
+
+## Goal
+Allow a user to request an order summary that processes multiple items in their cart sequentially.
+
+## Actors
+- **User** – Initiates the summary request.
+- **E-Commerce System** – Retrieves cart details and processes each item.
+- **Inventory Service** – Provides pricing and availability details for each item.
+
+## Preconditions
+- The user must have an active cart.
+- The E-Commerce System and Inventory Service are both available.
+
+## Triggers
+- The user clicks the “View Order Summary” button.
+
+## Basic Scenario
+1. The user requests an order summary from the E-Commerce System.
+2. The E-Commerce System retrieves the list of items in the user’s cart.
+3. The system enters a loop, iterating over each cart item:
+   - For each item, it queries the Inventory Service for up-to-date pricing and availability.
+   - The Inventory Service returns the item details.
+4. After all items are processed, the E-Commerce System calculates the total cost and applicable taxes.
+5. The system returns the completed order summary to the user.
+
+## Alternative Scenario
+- If the Inventory Service fails or times out for an item, the E-Commerce System logs the error, skips that item, and continues with the next item in the loop.
+
+Reference Response:
+@startuml
+title Generate Order Summaries (Loop + Alternative Scenario)
+
+actor User
+participant "E-Commerce System" as ECS
+participant "Inventory Service" as IS
+
+User -> ECS: Click "View Order Summary"
+activate ECS
+
+ECS -> ECS: Retrieve cart items
+
+loop For each Item in Cart
+    ECS -> IS: Request Item Details
+    activate IS
+    alt Inventory Service Succeeds
+        IS --> ECS: Return Pricing & Availability
+    else Inventory Service Fails or Times Out
+        ECS -> ECS: Log error (skip item)
+    end
+    deactivate IS
+end
+
+ECS -> ECS: Calculate total cost & taxes
+ECS --> User: Display Order Summary
+deactivate ECS
+@enduml
