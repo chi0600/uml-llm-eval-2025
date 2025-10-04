@@ -1,0 +1,69 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 5
+Summary: A patient orders medicine at his pharmacy through the website.
+Actors: Patient, pharmacist, prescription management system, doctor
+Precondition: Patient is registered in the system
+Description: 
+1.	Patient navigates to the website on his computer.
+2.	Patient logs in using his personal account.
+3.	Patient goes to the pharmacy’s part of the website. 
+4.	Patient finds the medicine he wants to order.
+5.	Patient orders the medicine at the pharmacy.
+6.	The order is uploaded to the prescription management system
+7.	The prescription management system notifies the pharmacist.
+8.	Pharmacist reviews the order.
+9.	Pharmacist readies the medicine for the patient and updates the status in the prescription management system.
+10.	Patient receives a notification that his order is ready.
+11.	Patient picks up his order at the pharmacy.
+Postcondition: Patient has his medicine.
+Alternate flow:
+1a-5a. A doctor places an order for medicine for his/her patient.
+
+
+Reference Response: 
+@startuml
+actor Patient
+actor Doctor
+actor Pharmacist
+boundary Website
+control Pharmacy
+entity "Prescription Management System" as PMS
+
+alt Patient places order
+    Patient -> Website: Navigate to website
+    activate Website
+    Patient -> Website: Login
+    Website -> Patient: Login successful
+    deactivate Website
+    Patient -> Pharmacy: Go to pharmacy section
+    activate Pharmacy
+    Patient -> Pharmacy: Find and select medicine
+    Patient -> Pharmacy: Order medicine
+else Doctor places order
+    Doctor -> Pharmacy: Place order for patient
+end
+
+
+activate Pharmacy
+Pharmacy -> PMS: Upload order
+deactivate Pharmacy
+activate PMS
+PMS -> Pharmacist: Notify of new order
+deactivate PMS
+
+activate Pharmacist
+Pharmacist -> PMS: Review order
+Pharmacist -> Pharmacy: Ready the medicine for the patient
+activate Pharmacy
+Pharmacist -> PMS: Update order status
+deactivate Pharmacist
+
+activate PMS
+PMS -> Patient: Notify order ready
+deactivate PMS
+
+Patient -> Pharmacy: Pick up order
+deactivate Pharmacy
+@enduml

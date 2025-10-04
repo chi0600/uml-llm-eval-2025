@@ -1,0 +1,79 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.7. Suggest Item Price
+The system should assist in the task of pricing a new inventory item by making pricing suggestions to the user when adding to or modifying an item in the inventory. The suggested prices should be calculated based on the original and sale prices of similar items that currently exist or existed in the inventory in the past.
+3.7.1. Actor(s): Administrator Director Manager Customer Service Representative Receiving Associate Pickup Associate Decon Associate
+3.7.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.7.3. Use Case Dependencies
+1. Add Item to Inventory
+2. Manage Inventory Items
+3.7.4. Basic Flows:
+1. User accesses the inventory entry screen (see Add Item to Inventory, Manage Inventory Items)
+2. System shows price recommendations based on current item data and default price suggestion configuration options
+3. User modifies item data
+4. System makes new price suggestions based on new item data
+3.7.5. Alternative Flows:
+1. User changes price suggestion configuration options
+2. System shows new price recommendations based on current item data and new configuration options
+3.7.6. Business Rules:
+1. Price suggestion is only applicable to Unique items
+2. By default, price suggestion considers historical data for items of the same:
+2.1. Department
+2.2. Category
+2.3. Condition
+3. The following price suggestion configuration parameters are available:
+3.1. Number of months of historical price information to include when calculating price recommendations. Available options:
+3.1.1. Six Months
+3.1.2. Twelve Months
+3.1.3. All (include all historical pricing data with no time restriction)
+3.2. Whether or not to include item attributes when finding items of similar characteristics
+3.2.1. When user chooses to include item attributes for item matching, user can specify which attributes to consider
+4. System displays the following price recommendation information:
+4.1. For unique items:
+4.1.1. Historical original item price information:
+4.1.1.1. Lowest price
+4.1.1.2. Mean price
+4.1.1.3. Highest price
+4.1.2. Historical sale price information
+4.1.2.1. Lowest price
+4.1.2.2. Mean price
+4.1.2.3. Highest price
+4.1.3. Number of items evaluated when calculating the amounts above
+5. For stock items
+5.1.1. System shows the pre-determined price for this stock item, set when the stock item category was created
+3.7.7. Post-Condition(s):
+1. Price suggestion information is displayed on the screen
+3.7.8. Open Issues:
+None
+3.7.9. Extension Points:
+None
+3.7.10. Activity Diagram(s):
+None
+Reference Response:
+@startuml
+title Use Case 3.7 – Suggest Item Price
+
+actor "User" as User
+participant "Inventory System" as System
+
+== Access Inventory Entry Screen ==
+User -> System : 1. Access inventory entry screen
+ref over User, System: See Add Item to Inventory, Manage Inventory Items
+activate System
+System -> User : 2. Display price recommendations based on current item data and default config options
+deactivate System
+
+== Modify Item Data ==
+User -> System : 3. Modify item data
+activate System
+alt Change Price Suggestion Config
+User -> System : Change price suggestion configuration options
+System -> User : Show new price recommendations based on updated config
+end
+
+System -> User : 4. Display new price suggestions based on updated item data
+deactivate System
+
+@enduml

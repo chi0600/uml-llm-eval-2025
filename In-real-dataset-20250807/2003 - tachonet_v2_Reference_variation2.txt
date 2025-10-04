@@ -1,0 +1,62 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+Use Case 02 – Check tachograph card status
+
+Goal:
+Check the status of a tachograph card by its card number and issuing Member State code. This is used by Card Issuing Authorities (CIA) to verify card validity (and by enforcement authorities during road checks).
+
+Basic Flow:
+1. TACHOnet deciphers the received request and logs it as-is in its tracking database.
+2. TACHOnet validates the request syntax and assigns a TCNRefId.
+3. TACHOnet builds new sub-requests based on the issuing Member State code provided for each card.
+4. For each identified issuing Member State, TACHOnet logs, encrypts, and sends a sub-request to the respective Member State CIA and waits for a response.
+5. For each received response, TACHOnet deciphers it, logs it as-is, validates its syntax, and if valid, stores the response message (linked to the TCNRefId) in the database.
+6. When all responses are received or a timeout occurs, TACHOnet builds, logs, encrypts, and sends a consolidated response to the original requester.
+
+Postconditions:
+An encrypted consolidated response is sent back to the requester.
+
+Reference Response:
+@startuml
+title Use Case 02 – Check tachograph card status
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+participant "Member State CIA" as MemberCIA
+database "TACHOnet Tracking Database" as DB
+
+CIA -> TACHOnet : Send request (Card number & Issuing Member State code)
+activate TACHOnet
+TACHOnet -> TACHOnet : Decipher request
+TACHOnet -> DB : Log received request as-is
+
+TACHOnet -> TACHOnet : Validate syntax
+TACHOnet -> TACHOnet : Assign TCNRefId
+
+TACHOnet -> TACHOnet : Build new requests (by Issuing Member State code)
+TACHOnet -> DB : Log new requests
+
+loop For each identified Issuing Member State
+    TACHOnet -> MemberCIA : Send encrypted request
+    activate MemberCIA
+    MemberCIA -> TACHOnet : Send response
+    deactivate MemberCIA
+end
+
+loop Process received responses
+    TACHOnet -> TACHOnet : Decipher response
+    TACHOnet -> DB : Log response as-is
+    TACHOnet -> TACHOnet : Validate syntax
+    TACHOnet -> DB : Store response message (linked to TCNRefId)
+end
+
+alt All responses received or timeout reached
+    TACHOnet -> TACHOnet : Build consolidated response
+    TACHOnet -> DB : Log consolidated response
+    TACHOnet -> CIA : Send encrypted consolidated response
+end
+
+deactivate TACHOnet
+@enduml

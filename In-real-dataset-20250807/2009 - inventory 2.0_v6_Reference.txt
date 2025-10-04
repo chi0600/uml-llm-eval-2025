@@ -1,0 +1,210 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.6. Manage Inventory Items
+The system should allow various management actions to be performed on items existing in the inventory. These include modifying, deleting and splitting an item, and viewing the item‟s details and item history. These actions are only available for Unique and Stock items.
+3.6.1. Actor(s): Administrator Director Manager
+3.6.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.6.3. Use Case Dependencies
+1. View Inventory
+2. Add Item to Inventory
+3. Suggest Item Price
+3.6.4. Basic Flows:
+1. Modify Inventory Item
+1.1. User accesses the main inventory screen
+1.2. The screen displays all inventory departments in matrix format with option to select and/or edit items to move them to a new department/category
+1.3. User drills down to the desired existing inventory item (see View Inventory)
+1.4. The item detail screen is presented
+1.5. User modifies item information
+1.6. The system validates item information
+1.7. Item information is updated in the inventory
+1.8. System gives the option of re-printing then item tag
+1.9. User optionally re-prints the item tag and attaches it to the item
+2. Adjust Item Quantity
+2.1. User accesses the main inventory screen
+2.2. The screen displays all inventory departments in matrix format
+2.3. User drills down to the desired existing inventory item (see View Inventory)
+2.4. The item detail screen is presented
+2.5. User changes the item quantity
+2.6. The system displays a confirmation screen where a reason for the adjustment must be specified by the user
+2.7. The system validates the item change
+2.8. Item information is updated in the inventory
+3. Split Inventory Item
+3.1. User accesses the main inventory screen
+3.2. The screen displays all inventory departments in matrix format
+3.3. User drills down to the desired existing inventory item (see View Inventory)
+3.4. The item detail screen is presented
+3.5. User clicks the Split Item button
+3.6. The system displays the Item Split screen
+3.7. User builds the list of items that the original item will be split into
+3.7.1. User can clone the original item to add new item(s) to the list that have similar attributes as the original item
+3.7.2. User can add new items to the list by selecting Unique and Stock categories in the same way as adding a new item to the inventory (see Add Item to Inventory)
+3.8. Once the list is complete, user confirms the split
+3.9. The system validates the split
+3.10. Item information is updated in the inventory
+3.10.1. The original (split) item is updated in the inventory
+3.10.2. Any new items that were added to the split list are added to the inventory maintaining parental history
+4. View Inventory Item History
+4.1. User accesses the main inventory screen
+4.2. The screen displays all inventory departments in matrix format
+4.3. User drills down to the desired existing inventory item (see View Inventory)
+4.4. The item detail screen is presented
+4.5. User clicks the Item History button
+4.6. The system displays the Item History screen containing current and historical information about the inventory item
+3.6.5. Alternative Flows:
+1. Modify Inventory Item
+1.1. User cancels the operation and is taken back to the item selection screen
+1.2. During data validation, data is deemed invalid and an error message is presented to the user
+2. Adjust Item Quantity
+2.1. User cancels the operation and is taken back to the item selection screen
+2.2. During data validation, data is deemed invalid and an error message is presented to the user
+3. Split Inventory Item
+3.1. User cancels the operation and is taken back to the item selection screen
+3.2. During data validation, data is deemed invalid and an error message is presented to the user
+4. View Inventory Item History
+None
+3.6.6. Business Rules:
+1. Modify Inventory Item
+1.1. All item properties available when the item was originally added to the inventory can be modified, except for the system-generated item number (see Add Item to Inventory).
+1.2. The business rules defined for adding a new item into the inventory are also applicable to modifying an existing inventory item (see Add Item to Inventory).
+1.3. Once set for the first time in the inventory, the item price can only be modified by a Manager, Director or Administrator, must maintain a history and include an explanation for the price change
+1.4. Changes to the item in the inventory should be reflected in the corresponding item in QuickBooks POS
+2. Adjust Item Quantity
+2.1. When an item is updated, the system must automatically detect that the item quantity has been modified and present the adjustment confirmation screen
+2.2. If the quantity is decreased, a reason for the change is required
+2.2.1. Valid reasons for are:
+2.2.1.1. Scraped
+2.2.1.2. Given Away (free bin)
+2.2.1.3. Discarded
+2.2.1.4. Broken
+2.2.1.5. Shrinkage (stolen or lost)
+2.2.1.6. Correction (data entry mistake)
+2.2.1.7. Other (please explain)
+2.2.2. If the „Other‟ reason is selected, the user must enter an additional comment
+2.3. If the quantity is increased, the user must enter a comment describing the reason for the change
+2.4. Changes to an item‟s quantity in the inventory should be reflected in the corresponding item in QuickBooks POS
+3. Split Inventory Item
+3.1. When building the split item list, at least two items must exist in the list, including the original item
+3.2. When building the split item list, the business rules defined for adding a new item into the inventory are also applicable (see Add Item to Inventory).
+3.3. Clicking the Clone button on a row adds a new item row with the same item values as the original, except for the item number, which is left blank
+3.4. Clicking the Add Item button takes the user through the inventory matrix so that a category can be selected for the new item. The user is then taken to the View/Update Item screen
+3.5. Clicking the category name for an item takes the user to the View/Update Item screen for that item
+3.6. All items in the split item list are saved in the inventory when the user confirms the split
+3.6.1. The original item is updated
+3.6.2. The new items are added to the inventory
+3.6.3. New items added to the inventory as part of a split item operation contain a reference to the original item they were split from
+4. View Inventory Item History
+4.1. The system should record the following actions and associated parameters for every item in the inventory and display them on the item history screen, along with action date/time:
+4.1.1. Item added to inventory: Initial quantity, user and original (parent) item number if this item was created as part of a split
+4.1.2. Item price set: Initial price and user
+4.1.3. Item price changed: New price and user
+4.1.4. Item sold: Sale price and quantity
+4.1.5. Quantity adjusted: Adjusted quantity, user and reason if quantity decreased
+4.1.6. Item split: Item numbers of the new items added as part of the split and user
+3.6.7. Post-Condition(s):
+1. Modify Inventory Item
+1.1. Item is updated in the inventory
+1.2. Item is updated in QuickBooks POS
+2. Adjust Item Quantity
+2.1. Item is updated in the inventory
+2.2. Item is updated in QuickBooks POS
+3. Split Inventory Item
+3.1. Original item is updated in the inventory
+3.2. Original item is updated in QuickBooks POS
+3.3. New items are updated in the inventory
+3.4. New items are updated in QuickBooks POS
+4. View Inventory Item History
+None
+3.6.8. Open Issues:
+None
+3.6.9. Extension Points:
+None
+3.6.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.6 – Manage Inventory Items
+
+actor "User" as User
+participant "Inventory System" as System
+
+== Modify Inventory Item ==
+User -> System : 1.1 Access main inventory screen
+activate System
+System -> User : 1.2 Display inventory departments (matrix format)
+User -> System : 1.3 Drill down to desired item
+ref over User, System: See View Inventory
+System -> User : 1.4 Display item detail screen
+User -> System : 1.5 Modify item information
+System -> System : 1.6 Validate item information
+alt Data valid
+    System -> System : 1.7 Update item in inventory
+    System -> System : Update item in QuickBooks POS
+    System -> User : 1.8 Option to reprint item tag
+    opt Reprint tag
+        User -> System : Print item tag
+    end
+else Data invalid
+    System -> User : Error: Invalid item data
+end
+deactivate System
+
+== Adjust Item Quantity ==
+User -> System : 2.1 Access main inventory screen
+activate System
+System -> User : 2.2 Display inventory departments (matrix format)
+User -> System : 2.3 Drill down to desired item
+ref over User, System: See View Inventory
+System -> User : 2.4 Display item detail screen
+User -> System : 2.5 Change item quantity
+System -> User : 2.6 Display confirmation screen (reason required)
+User -> System : Enter reason for adjustment
+System -> System : 2.7 Validate item change
+alt Data valid
+    System -> System : 2.8 Update item quantity in inventory
+    System -> System : Update item quantity in QuickBooks POS
+else Data invalid
+    System -> User : Error: Invalid quantity data
+end
+deactivate System
+
+== Split Inventory Item ==
+User -> System : 3.1 Access main inventory screen
+activate System
+System -> User : 3.2 Display inventory departments (matrix format)
+User -> System : 3.3 Drill down to desired item
+ref over User, System: See View Inventory
+System -> User : 3.4 Display item detail screen
+User -> System : 3.5 Click Split Item button
+System -> User : 3.6 Display Item Split screen
+alt Clone original item
+    User -> System : 3.7.1 Clone item to add similar attributes
+else Add new item
+    User -> System : 3.7.2 Select Unique or Stock category
+    ref over User, System: See Add Item to Inventory
+end
+User -> System : 3.8 Confirm split
+System -> System : 3.9 Validate split
+alt Split valid
+    System -> System : 3.10 Update original item
+    System -> System : Add new items to inventory (with history)
+    System -> System : Update QuickBooks POS
+else Split invalid
+    System -> User : Error: Invalid split configuration
+end
+deactivate System
+
+== View Inventory Item History ==
+User -> System : 4.1 Access main inventory screen
+activate System
+System -> User : 4.2 Display inventory departments (matrix format)
+User -> System : 4.3 Drill down to desired item
+ref over User, System: See View Inventory
+System -> User : 4.4 Display item detail screen
+User -> System : 4.5 Click Item History button
+System -> User : 4.6 Display item history screen (current and historical data)
+deactivate System
+
+@enduml

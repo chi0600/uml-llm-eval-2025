@@ -1,0 +1,38 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 3
+Summary: A nurse uses a mobile device, the recorded data is uploaded to the database.
+Actors: Nurse, mobile device
+Precondition: Patient is checked in to the hospital and has to have his blood pressure measured.
+Description: 
+1.	The nurse brings the mobile device to the patient
+2.	The nurse indicates on the mobile device which patient will be measured.
+3.	The nurse measures the blood pressure of the patient with the mobile device.
+4.	The mobile device automatically uploads this information to the global database, where it is included in the correct patient’s EMR.
+Postcondition: The patient’s blood pressure is measured and the values are added to his EMR.
+
+
+Reference Response:
+@startuml
+actor Nurse
+actor Patient
+control "Mobile Device" as Device
+database "Global Database" as DB
+
+Nurse -> Patient: Bring mobile device
+Nurse -> Device: Indicate patient for measurement
+activate Device
+
+Nurse -> Device: Start blood pressure measurement in the mobile device
+Device -> Patient: Measure blood pressure
+activate Patient
+Patient -> Device: Obtain blood pressure
+deactivate Patient
+
+Device -> DB: Upload measurement in the correct patient’s EMR
+activate DB
+deactivate DB
+
+deactivate Device
+@enduml

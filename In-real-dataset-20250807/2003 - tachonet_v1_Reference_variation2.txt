@@ -1,0 +1,103 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+Use Case 01 – Check driver(s)’ issued cards
+
+Goal:
+Process a request for checking a driver’s issued card(s) coming from a Card Issuing Authority (CIA) in either online (single driver) or batch mode. This use case is also used by enforcers during road checks on behalf of the CIA.
+
+Basic Flow:
+1. TACHOnet deciphers the received request and logs it as-is in its tracking database.
+2. TACHOnet validates the request’s syntax and assigns a TCNRefId.
+3. TACHOnet builds sub-requests for each issuing Member State code found in the original request (plus one for sub-requests without a code) by applying defined name encoding rules.
+4. For each identified issuing Member State:
+   - TACHOnet builds, logs, encrypts, and sends a new sub-request (containing only sub-requests for that Member State) to the corresponding Member State CIA, then waits for a response.
+   - For sub-requests without any issuing Member State code, TACHOnet broadcasts the encrypted request to all configured Member States (except the originating one) and waits for responses.
+5. For each received response, TACHOnet deciphers it, logs it as-is, validates its syntax, and if valid, stores the response data (linked to the TCNRefId) in its database.
+6. When all responses are received or a timeout occurs, TACHOnet builds a single consolidated response from the stored responses.
+7. TACHOnet logs the consolidated response, encrypts it, and sends it back to the original caller.
+
+Alternate Flows (selected):
+- ALT-01: On receiving a negative response, TACHOnet logs it and marks that Member State’s request as completed (with error).
+- ALT-02: If multiple responses are received from a Member State, only the first is processed.
+- ALT-03: If a Member State’s response is not received within time, a ‘timeout’ status is noted.
+- ALT-04: Late responses are logged and ignored.
+- ALT-05/ALT-06: If an invalid format or XML message is received, TACHOnet sends a negative receipt (and warns the TCN Administrator).
+
+Postconditions:
+TACHOnet sends an encrypted consolidated response to the original caller.
+
+Reference Response:
+@startuml
+title Use Case 01 – Check driver(s)’ issued cards
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+participant "Member State CIA" as MemberCIA
+database "TACHOnet Tracking Database" as DB
+participant "TCN Administrator" as Admin
+
+CIA -> TACHOnet : Send request (Single/Batch)
+activate TACHOnet
+TACHOnet -> TACHOnet : Decipher request
+TACHOnet -> DB : Log received request as-is
+
+alt Invalid request format
+    TACHOnet -> CIA : Send negative receipt (Invalid Format)
+    TACHOnet -> Admin : Warn TCN Administrator
+end
+
+TACHOnet -> TACHOnet : Validate syntax
+
+alt Invalid XML message
+    TACHOnet -> CIA : Send negative receipt (Invalid XML)
+end
+
+TACHOnet -> TACHOnet : Assign TCNRefId
+TACHOnet -> TACHOnet : Build sub-requests (by Member State codes or broadcast)
+TACHOnet -> DB : Log sub-requests
+
+alt Sub-request for specific Member State
+    TACHOnet -> MemberCIA : Send encrypted request (Single Member State)
+    activate MemberCIA
+    MemberCIA -> TACHOnet : Return response
+    deactivate MemberCIA
+else Broadcast to all Member States
+    TACHOnet -> MemberCIA : Send encrypted request (All Member States except sender)
+    loop Wait for all responses
+        activate MemberCIA
+        MemberCIA -> TACHOnet : Return response
+        deactivate MemberCIA
+    end
+end
+
+loop Process received responses
+    TACHOnet -> TACHOnet : Decipher response
+    alt Normal case
+        TACHOnet -> DB : Log response as-is
+    else Negative response (ALT-01)
+        TACHOnet -> DB : Log error status response
+    else Multiple responses (ALT-02)
+        TACHOnet -> TACHOnet : Ignore additional responses
+    else No response within timeout (ALT-03)
+        TACHOnet -> TACHOnet : Mark timeout status in consolidated response
+    else Late response (ALT-04)
+        TACHOnet -> DB : Log late response
+        TACHOnet -> TACHOnet : Ignore late response
+    else Invalid format (ALT-05)
+        TACHOnet -> MemberCIA : Send negative receipt (Invalid Format)
+        TACHOnet -> Admin : Warn TCN Administrator
+    else Invalid XML (ALT-06)
+        TACHOnet -> MemberCIA : Send negative receipt (Invalid XML)
+    end
+end
+
+alt All responses received or timeout reached
+    TACHOnet -> TACHOnet : Build consolidated response from stored data
+    TACHOnet -> DB : Log consolidated response
+    TACHOnet -> CIA : Send encrypted consolidated response
+end
+
+deactivate TACHOnet
+@enduml

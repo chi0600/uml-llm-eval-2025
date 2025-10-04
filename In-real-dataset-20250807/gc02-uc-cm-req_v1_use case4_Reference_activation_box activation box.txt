@@ -1,0 +1,35 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 4
+Summary: An analyst reviews the data collected by the system
+Actors: Analyst, central database
+Preconditions: Analyst has access to the system, there has been data collected
+Description: 
+1.	Analyst logs in to the system with his personal account.
+2.	Analyst requests data from the central database. 
+3.	Central database sends data to analyst.
+4.	Analyst performs his analysis on this data.
+Postcondition: Data has been collected and analyzed.
+
+
+Reference Response:
+@startuml
+actor Analyst
+control System
+database "Central Database" as DB
+
+activate Analyst
+Analyst -> System: Login
+activate System
+System -> Analyst: Login successful
+deactivate System
+
+Analyst -> DB: Request data
+activate DB
+DB -> Analyst: Send data
+deactivate DB
+
+Analyst -> Analyst: Perform analysis
+deactivate Analyst
+@enduml

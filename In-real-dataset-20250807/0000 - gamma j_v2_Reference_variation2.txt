@@ -1,0 +1,71 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Login Customer
+
+Goal:
+Login to a customer account with the system.
+
+Actors:
+- Customer
+- Weborder System
+
+Preconditions:
+Customer account must already be registered.
+
+Triggers:
+Customer clicks the button or link to "Login"
+
+Basic Scenario:
+1. Customer clicks on the button or link to initiate the login process.
+2. System prompts the customer for his/her email and password.
+3. System verifies the information.
+4. System creates a session cookie.
+5. System displays the account home page to the Customer.
+
+Alternative Scenario:
+A1. System recognizes the Customer's cookie.
+A2. Go to Step 5 (Basic Scenario).
+B1. Customer enters incorrect login information.
+B2. System prompts the Customer to resend login details to the email account.
+B3. Customer confirms.
+B4. System sends an email to the registered email address.
+B5. Go to Step 1 (Basic Scenario).
+
+Postconditions:
+The Customer is logged into the system.
+
+Reference Response:
+@startuml
+title Customer Login Process
+
+actor Customer
+participant "Weborder System" as WeborderSystem
+
+Customer -> WeborderSystem : Click "Login"
+activate WeborderSystem
+WeborderSystem -> Customer : Prompt for email and password
+deactivate WeborderSystem
+
+alt Cookie recognized
+    WeborderSystem -> Customer : Display account home page
+    activate WeborderSystem
+else No cookie
+    Customer -> WeborderSystem : Enter email and password
+    WeborderSystem -> WeborderSystem : Verify information
+
+    alt Correct information
+        WeborderSystem -> WeborderSystem : Create session cookie
+        WeborderSystem -> Customer : Display account home page
+    else Incorrect information
+        WeborderSystem -> Customer : Prompt to resend login details
+        Customer -> WeborderSystem : Confirm resend
+        WeborderSystem -> WeborderSystem : Send email to registered address
+        WeborderSystem -> Customer : Prompt for email and password
+    end
+end
+deactivate WeborderSystem
+
+@enduml

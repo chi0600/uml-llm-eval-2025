@@ -1,0 +1,93 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 2
+Scope: IFA Digital System
+Level: Live Game Updates
+Primary Actor: Referee, Sub-Referee
+Stakeholders: IFA, Fans, Referee, Sub-Referee, Teams
+Main Success Scenario:
+1. Stakeholders receive an alert that a game has started.
+2. The referee is on the playing field and can access the system using a mobile phone.
+3. Sub-referee can access the system using a mobile phone.
+4. Either of the primary actors records the live scores of the game.
+Step 4 is repeated until the game ends.
+5. Either of the primary actors can post in the system about the penalties issued in the game.
+6. Sub-referee can record snippets of the live game and upload it into the system.
+7. All the updates posted by the primary actors are visible to the stakeholders.
+Special Requirements:
+• All the stakeholders should have individual user profile in the system.
+• All the stakeholders can comment on the posts uploaded by referees.
+• Posts made by referees should be available in real-time.
+
+Reference Response:
+@startuml
+actor Referee
+actor "Sub Referee" as SubReferee
+entity System
+participant IFA
+participant Fans
+participant Teams
+
+par
+System -> Referee: Receive alert for game start
+activate System
+else
+System -> SubReferee: Receive alert for game start
+else
+System -> IFA: Receive alert for game start
+else
+System -> Fans: Receive alert for game start
+else
+System -> Teams: Receive alert for game start
+end
+
+par
+Referee -> System: Access system via mobile
+else
+SubReferee -> System: Access system via mobile
+end
+
+loop Until game ends
+    alt
+    Referee -> System: Record live scores
+    else
+    SubReferee -> System: Record live scores
+    end
+end
+
+alt
+Referee -> System: Post penalties
+else
+SubReferee -> System: Post penalties
+end
+
+SubReferee -> System: Record and upload snippets
+
+par
+System -> Referee: Updates visible in real-time
+else
+System -> SubReferee: Updates visible in real-time
+else
+System -> IFA: Updates visible in real-time
+else
+System -> Fans: Updates visible in real-time
+else
+System -> Teams: Updates visible in real-time
+end
+
+opt
+par
+Referee --> System: Comment on the posts
+else
+SubReferee --> System: Comment on the posts
+else
+IFA --> System: Comment on the posts
+else
+Fans --> System: Comment on the posts
+else
+Teams --> System: Comment on the posts
+deactivate System
+end
+end
+@enduml

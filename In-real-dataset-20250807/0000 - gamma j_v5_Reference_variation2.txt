@@ -1,0 +1,64 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Add Item To Cart
+
+Goal:
+Customer adds item(s) in the cart
+
+Actors:
+- Customer
+- System
+
+Preconditions:
+The customer must be logged in on the system.
+
+Triggers:
+Customer clicks the button or link to "Add To Cart".
+
+Basic Scenario:
+1. Customer clicks the button or link to add an item with a specified quantity.
+2. System adds the item(s) to the cart.
+3. System prompts the Customer to edit the quantity or remove the item from the cart.
+4. Customer confirms the items in the cart.
+5. System stores a cookie with the cart details.
+6. Customer returns to product listings.
+
+Alternative Scenario:
+A1. Customer terminates the web browser window after adding item(s) to the cart.
+A2. Customer returns to the weborder interface.
+A3. System recognizes the cookie and proceeds to step 6 with the existing items in the cart.
+
+Postconditions:
+The Customer has added item(s) to the shopping cart.
+
+Reference Response:
+@startuml
+title Add Item To Cart
+
+actor Customer
+participant "System" as System
+
+Customer -> System : Click "Add To Cart"
+activate System
+System -> System : Add item(s) to cart
+System -> Customer : Prompt to edit quantity or remove item
+deactivate System
+
+alt Customer confirms
+    Customer -> System : Confirm items
+    activate System
+    System -> System : Store cookie with cart details
+    System -> Customer : Return to product listings
+    deactivate System
+else Customer terminates session
+    Customer -> System : Close browser window
+    activate System
+    System -> System : Recognize cookie
+    System -> Customer : Load existing items in cart
+    System -> Customer : Return to product listings
+    deactivate System
+end
+@enduml

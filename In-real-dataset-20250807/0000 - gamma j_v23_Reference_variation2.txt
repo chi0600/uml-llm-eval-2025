@@ -1,0 +1,49 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Edit Customer Details
+
+Goal:
+Edit the customer account details.
+
+Actors:
+- Customer
+- Weborder System
+
+Preconditions:
+Customer must be logged-in on the system.
+
+Triggers:
+Customer clicks the button or link to "Edit Account"
+
+Basic Scenario:
+1. Customer clicks the button or link to initiate the process to edit the account.
+2. System displays the account home page to the Customer.
+3. Customer clicks the button or link to edit the account details.
+4. System verifies the changes.
+5. System stores the new account information.
+
+Alternative Scenario:
+None
+
+Postconditions:
+The Customer has changed the account details.
+
+Reference Response:
+@startuml
+title Edit Customer Details
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Edit Account"
+activate System
+System -> Customer : Display account home page
+Customer -> System : Click to edit account details
+System -> System : Verify changes
+System -> System : Store new account information
+deactivate System
+
+@enduml

@@ -1,0 +1,57 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements: 
+Use Case 2
+Summary: A patient schedules an appointment 
+Actors: Patient, appointment scheduling system, receptionist
+Precondition: Patient is a user in the hospital system
+Description: 
+1.	Patient opens the hospital app on his phone.
+2.	Patient logs in on the app with his personal account.
+3.	Patient navigates to the part of the app for scheduling appointments.
+4.	Patient selects a time slot to schedule his appointment. (Exception: this time slot is already reserved)
+5.	The appointment scheduling system sends the request to a receptionist.
+6.	A receptionist approves the request.
+7.	The appointment scheduling system sends the appointment to the doctor.
+8.	The appointment is created in the global database.
+Exceptions:
+Time slot is already reserved. Raised when another patient reserves a time slot while this patient is in the process. Can be prevented by not allowing two patients to select the same time slot.
+Postcondition: There is an appointment scheduled 
+ 
+
+Reference Response:
+@startuml
+actor Patient
+actor Receptionist
+actor Doctor
+boundary "Hospital App Interface" as App
+control "Appointment Scheduling System" as ASS
+database "Global Database" as DB
+
+Patient -> App: Open app
+activate App
+Patient -> App: Log in
+App -> Patient: Display user interface
+deactivate App
+
+Patient -> App: Navigate to scheduling section
+activate App
+Patient -> App: Select time slot
+App -> ASS: Send request
+deactivate App
+
+activate ASS
+alt Time slot reserved
+    ASS -> Patient: Notify time slot is reserved
+else Time slot available
+    ASS -> Receptionist: Send request for approval
+    Receptionist -> ASS: Approve request
+
+    ASS -> Doctor: Notify doctor of appointment
+    ASS -> DB: Create appointment in database
+    activate DB
+end
+deactivate ASS
+DB -> Patient: Confirm appointment
+deactivate DB
+@enduml

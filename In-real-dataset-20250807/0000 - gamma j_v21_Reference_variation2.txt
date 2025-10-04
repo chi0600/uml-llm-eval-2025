@@ -1,0 +1,57 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Register Customer
+
+Goal:
+Register a new customer account with the system.
+
+Actors:
+- Customer
+- Weborder System
+
+Preconditions:
+Customer must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:
+Customer clicks the button or link to "Register"
+
+Basic Scenario:
+1. Customer clicks the button or link to initiate the registration process.
+2. System prompts the customer to fill out first name, last name, billing address, shipping address, email address, and password.
+3. Customer enters the registration fields.
+4. System validates the customer's information.
+5. System creates a new account for the Customer.
+6. System creates a session cookie.
+7. System displays the account home page to the Customer.
+
+Alternative Scenario:
+A1. If the system recognizes the customer's cookie, skip directly to Step 7.
+
+Postconditions:
+The Customer registers and creates a new customer account with the system.
+
+Reference Response:
+@startuml
+title Register Customer
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Register"
+activate System
+alt Recognizes customer's cookie
+    System -> Customer : Display account home page
+else Requires registration
+    System -> Customer : Prompt for registration fields (name, billing address, shipping address, email, password)
+    Customer -> System : Enter registration details
+    System -> System : Validate customer's information
+    System -> System : Create new customer account
+    System -> System : Create session cookie
+    System -> Customer : Display account home page
+end
+deactivate System
+
+@enduml

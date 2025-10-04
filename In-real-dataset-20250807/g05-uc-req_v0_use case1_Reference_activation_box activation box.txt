@@ -1,0 +1,92 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 1
+Scope: IFA Digital System
+Level: Budget and Reporting
+Primary Actor: Team Manager, IFA Budget Manager, IFA Auditor
+Stakeholders: IFA, Team Managers
+Main Success Scenario:
+1. IFA Budget manager receives an alert.
+2. IFA Budget manager assigns a budget to the teams using the system.
+3. IFA Budget Manager will assign budgets to the teams using the “Budget” section in the
+system.
+Step 1 will keep repeating until the budget is uploaded into the system.
+4. Team manager receives an alert
+5. Team manager can see the assigned budget.
+6. Team manager assigns the budget to various team activities.
+7. Team manager prepares a report of all the spendings.
+8. Team manager uploads a report into the system.
+Step 4 will keep repeating until the report is uploaded into the system.
+9. IFA Auditor receives an alert.
+10. IFA auditor can see the report submitted by the team manager.
+11. IFA Auditor sends a communication to the team manager if any discrepancies in the report
+are found.
+12. Team manager receives an alert.
+13. Team manager edits the report and uploads it back to the system.
+14. IFA Auditor receives an alert.
+15. IFA Auditor approves the report.
+Steps 11-14 will keep repeating until the IFA Auditor is satisfied with the report.
+Special Requirements:
+• All the stakeholders should have a user profile in the system.
+• The “Budget” interface of the system is only visible to the primary actors.
+• The interface should be available in multiple languages and currencies.
+• The interface should have an encryption layers to protect the confidential budget data.
+• IFA Budget manager can monitor the budgets in real-time.
+• IFA Budget Manager cannot edit the report submitted by the team manager.
+• IFA Auditor cannot edit the report submitted by the team manager.
+• IFA Auditor cannot change the budget numbers.
+• Team manager cannot change the budget numbers.
+• Team manager can only see his/her budget.
+• IFA Budget manager and IFA auditor can see all the assigned budgets.
+• This complete activity is to be repeated yearly.
+• The budget details should be archived for future reference.
+
+
+Reference Response:
+@startuml
+actor "Team Manager" as TM
+actor "IFA Budget Manager" as IBM
+entity System
+actor "IFA Auditor" as IA
+
+==  Use Case 1: Budget and Reporting ==
+loop every year
+loop Budget is not uploaded
+System -> IBM: Receive alert
+activate System
+break Budget is uploaded
+IBM -> System: Assign budget to teams using the “Budget” section
+deactivate System
+end
+end
+
+loop Report is not uploaded
+System -> TM: Alert for assigned budget
+activate System
+System -> TM: Display assigned budget
+deactivate System
+TM -> TM: Assign budget to activities
+TM -> TM: Prepare spending report
+break Report is uploaded
+TM -> System: Upload report spending report
+activate System
+end   
+end
+
+System -> IA: Alert for submitted report
+System -> IA: Display submitted report
+deactivate System
+loop Report is not approved
+    IA -> TM: Alert for discrepancies
+    TM -> TM: Edit report
+    TM -> System: Upload report
+    activate System
+    System -> IA: Alert for edited report
+    deactivate System
+break Report is approved
+    IA -> System: Approve report
+end
+end
+end
+@enduml

@@ -1,0 +1,140 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.5. Add Item to Inventory
+Items are typically added to the inventory as part of the donation processes. This is called adding an item in donation processing. Alternatively, items can be added during routine inventory maintenance. This is called adding an item in inventory management mode.
+3.5.1. Actor(s): Administrator Director Manager Receiving Associate Pickup Associate Decon Associate Customer Service Representative
+3.5.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.5.3. Use Case Dependencies
+1. View Inventory
+2. Suggest Item Price
+3. Manage Attributes and Details
+4. Receive Acquisition
+3.5.4. Basic Flows:
+1. User accesses the main inventory screen
+5. The screen displays all inventory departments in matrix format (see View Inventory)
+2. User drills down to the appropriate category for the item
+2.1. If in donation processing mode, the item entry screen is presented automatically
+2.2. If in inventory management mode, the list of existing inventory items in that category is displayed
+2.2.1. User clicks the Add Item button
+3. The appropriate item entry screen is presented
+4. User fills in item information
+5. User confirms the addition of the new item
+6. Inventory is updated
+7. System gives the option of printing an item tag
+8. User prints item tag(s)s for unique or stock item(s)
+9. User attaches tag(s) to the item(s)
+3.5.5. Alternative Flows:
+1. At any point, the user may click on a department on the inventory department shortcuts list, which takes the user to the inventory view for that particular department.
+2. At any point while in the item add screen, the user may cancel the operation.
+3.5.6. Business Rules:
+1. When navigating to the desired item category, departments and categories are displayed according to the rules defined in View Inventory
+2. Items can be added at any level in the categorized inventory
+3. Only unique and stock items are tracked by the inventory system
+3.1. Only unique and stock items are available to be added in inventory management mode
+3.2. Under $5 items can only be added in donation processing mode
+3.2.1. Information about Under $5 items is only added for the purpose of generating the donation receipt
+4. When an item is added to the inventory, the system updates QuickBooks POS accordingly and promptly
+4.1. A new item entry is created in POS for a unique item
+4.2. The item category name in POS is set to XXXXXXXXXXXXXXXXXX-NNNNNNNNNNN, where XXXXXXXXXXXXXXXXXX is the category‟s Unique Tag and NNNNNNNNNNN is a sequential, system–generated number
+4.3. The item quantity is updated for a stock item
+5. Mandatory fields:
+5.1. Unique items
+5.1.1. Quantity
+5.1.2. Condition
+5.1.3. Price
+5.1.4. Description, if the selected category is a generic category
+5.2. Stock items
+5.2.1. None – all fields are pre-set and cannot be modified
+5.3. Under $5 items
+5.3.1. Description
+6. The Category field is a link to the inventory matrix view, which allows you to select a new category by drilling down to any existing category
+7. The available options in the Material, Finish, Color and Features selectors should be the ones defined for the selected department (see Manage Attributes and Details)
+8. The fields and available options under the Details section should be the ones defined for the selected category (see Manage Attributes and Details)
+9. For Stock Items, all fields are pre-set and disabled, and cannot be changed
+10. For Unique Items, all fields with values defined when the Unique Item category was created are pre-set and cannot be changed
+11. For unique and stock items, the system makes pricing recommendations to the user on the item entry screen (see Suggest Item Price)
+11.1. For unique items, user can accept the suggested price, enter a different one, or leave it blank
+11.1.1. The item price can only be left blank during the processing of an acquisition. The price has to be set before the item can be added to the inventory
+11.2. For stock items, the price is pre-set and the user cannot change it
+12. Receiving Associates and Pickup and Decon Associates can only add items to the inventory as part of processing a donation (see Receive Acquisition)
+13. Pickup and Decon Associates can access the screen and enter all item information, but they cannot complete the add operation and add the item into the inventory.
+14. The item tag, which could be an RFID tag, should contain the following information:
+14.1. CJ logo
+14.2. Department name
+14.3. Category name
+14.4. Item description
+14.5. Condition
+14.6. Size (with units)
+14.7. Price (with indication if item is being sold on consignment)
+14.8. Item number and bar code
+14.9. Acquisition number
+14.10. Date received
+3.5.7. Post-Condition(s):
+1. Item is present in the Inventory Management System
+2. Unique and stock items have item tags
+3. In the case of a unique item, item is added to QuickBooks POS
+4. In the case of a stock item, item quantity is updated in QuickBooks POS
+3.5.8. Open Issues:
+None
+3.5.9. Extension Points:
+None
+3.5.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.5 – Add Item to Inventory
+
+actor "User" as User
+participant "Inventory System" as System
+
+== Access Inventory ==
+User -> System : 1. Access main inventory screen
+activate System
+System -> User : 1.1 Display inventory departments in matrix format
+deactivate System
+
+== Drill Down to Category ==
+User -> System : 2. Drill down to the appropriate category
+activate System
+alt Donation Processing Mode
+    System -> User : 2.1 Display item entry screen
+else Inventory Management Mode
+    System -> User : 2.2 Display list of existing items
+    User -> System : 2.2.1 Click Add Item button
+    System -> User : Display item entry screen
+end
+deactivate System
+
+== Add Item ==
+User -> System : 3. Fill in item information
+activate System
+alt Unique Item
+    User -> System : Enter Quantity, Condition, Price, Description
+    System -> System : Validate item data
+    alt Data valid
+        System -> System : Add unique item to inventory
+        System -> System : Update QuickBooks POS with new item
+    else Data invalid
+        System -> User : Error: Invalid item data
+    end
+else Stock Item
+    System -> User : Fields pre-set and disabled
+    System -> System : Update stock item quantity in inventory and POS
+else Under $5 Item
+    User -> System : Enter Description
+    System -> System : Add item for donation receipt
+end
+deactivate System
+
+== Confirm and Tag ==
+User -> System : 5. Confirm addition of item
+activate System
+System -> User : 7. Option to print item tag
+User -> System : Print item tag(s)
+User -> User : Attach tag(s) to item(s)
+
+deactivate System
+@enduml

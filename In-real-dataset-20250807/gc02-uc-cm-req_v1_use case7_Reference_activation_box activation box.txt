@@ -1,0 +1,46 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 7
+Summary: Patient changes his personal information in the central database.
+Actor: Patient
+Precondition: Patient is registered in the system.
+Description:
+1.	Patient navigates to the website on his computer.
+2.	Patient logs in using his personal account.
+3.	Patient navigates to the personal information section.
+4.	Patient clicks the button to change his information.
+5.	Patient supplies new information and clicks save.
+6.	The new information is added to the central database by the system.
+7.	The central database applies the change to all relevant systems.
+Postcondition: The patient’s personal information has been changed.
+ 
+
+Reference Response: 
+@startuml
+actor Patient
+boundary Website
+control "Personal Information Section" as PIS
+database "Central Database" as DB
+control "All Relevant Systems" as RS
+
+Patient -> Website: Navigate to website
+activate Website
+Patient -> Website: Login
+Website -> Patient: Login successful
+deactivate Website
+
+Patient -> PIS: Navigate to personal info
+activate PIS
+Patient -> PIS: Request to change the information
+PIS -> Patient: Request response
+Patient -> PIS: Supply new information
+PIS -> PIS: Save the information
+PIS -> DB: Add the information
+deactivate PIS
+activate DB
+DB -> RS: Apply change
+activate RS
+deactivate RS
+deactivate DB
+@enduml

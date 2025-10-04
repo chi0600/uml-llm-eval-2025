@@ -1,0 +1,58 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 4
+Scope: IFA Digital System
+Level: Fan Portal
+Primary Actor: Fans
+Stakeholders: Fans, IFA, Teams
+Main Success Scenario:
+1. Fan registers in the system and creates a user profile.
+2. Fan “follows” the profiles of favourite teams and players.
+3. Fan gets an alert whenever there is an activity by the followed team(s) and/or player(s).
+4. A fan can see the activity and comment on the posts made by the followed team(s) and/or
+player(s).
+Alternate Flows:
+1. A fan does not have a user profile. He/she is considered as a guest user.
+2. Guest User can check the live scores and live updates.
+3. Guest User can check the page that displays the score of all the matches in the tournament.
+Special Requirements:
+• All the stakeholders should have user profile to use the “follow” feature of the system.
+• All the stakeholders should have user profile to use the “alert” feature of the system.
+• The system should be able to accommodate at least 50,000 users at once.
+• The updates made by the users should be visible in real time.
+
+
+Reference Response:
+@startuml
+actor Fan
+entity System
+
+alt If a fan is a new user in the system
+    Fan -> System: Request to Register
+    activate System
+    System -> Fan: Register successful
+    Fan -> System: Create a user profile
+    System -> Fan: User profile is created
+    deactivate System
+    Fan -> System: Follow the profiles of favourite teams and players
+    activate System
+    opt If there is an activity by the followed team(s) and/or player(s)
+        System -> Fan: Alert for activity by followed teams/players
+        Fan -> System: View activity and comment
+    end
+    deactivate System
+
+else If a fan is a guest user
+    Fan -> System: Check live scores and updates
+    activate System
+    Fan -> System: View the score of all the matches in the tournament
+    deactivate System
+end
+
+note right of System
+The system should be 
+able to accommodate at 
+least 50,000 users at once.
+end note
+@enduml

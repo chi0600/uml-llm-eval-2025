@@ -1,0 +1,45 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 6
+Summary: Admin adds a new doctor to the system.
+Actors: Admin, doctor
+Precondition: The hospital has employed a new doctor.
+Description: 
+1.	The hospital sends the information of the new doctor to the admin.
+2.	The admin creates a new account for this doctor.
+3.	The admin sets the privileges of the newly created account.
+4.	The account credentials are sent to the new doctor.
+5.	The doctor uses the received credentials to log in to the system.
+Postcondition: The doctor can log in the system, and only access the information that is relevant to him. 
+
+Reference Response:
+@startuml
+actor Admin
+actor Doctor
+participant "Hospital" as Hospital
+control "System" as Sys
+
+activate Hospital
+Hospital -> Admin: Send the new doctor information
+deactivate Hospital
+
+activate Admin
+Admin -> Sys: Create a new doctor account
+activate Sys
+Sys -> Admin: Confirm account creation
+deactivate Sys
+
+Admin -> Sys: Set account privileges
+deactivate Admin
+activate Sys
+Sys -> Doctor: Send account credentials
+deactivate Sys
+
+activate Doctor
+Doctor -> Sys: Login
+activate Sys
+Sys -> Doctor: Login successful
+deactivate Sys
+deactivate Doctor
+@enduml

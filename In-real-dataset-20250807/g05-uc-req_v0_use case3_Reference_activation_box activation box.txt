@@ -1,0 +1,74 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use Case 3
+Scope: IFA Digital System
+Level: Scheduling
+Primary Actor: Referee, IFA Scheduling Committee member
+Stakeholders: Referee, IFA, Teams
+Main Success Scenario:
+1. The IFA Scheduling committee plans to schedules the games.
+2. Referees receive an alert.
+3. Referees put in the system the dates they are available on.
+4. The IFA Scheduling committee member enters the parameters in the system required to
+make a schedule.
+5. The IFA Scheduling committee member enters the dates referees are available on.
+6. The system generates an automatic schedule.
+7. Teams receive an alert.
+8. Referees receive an alert.
+Special Requirements:
+• All the stakeholders should have individual user profile in the system.
+• The games are scheduled once a year.
+• The interface should have the capability to accommodate multiple time zones.
+• There should be a provision in the system which allows the scheduling committee to give a
+team a rest period of “n” days between two consecutive matches.
+• Once a schedule is made, it cannot be changed by anyone except a senior member of the
+scheduling committee.
+• Change is schedule has to be approved and the reason for rescheduling has to be stated.
+• The schedule can be exported into a “.pdf” format.
+• The teams and referees cannot edit the schedule.
+• All the scheduled should be archived for future reference.
+
+Reference Response:
+@startuml
+actor Referees
+actor "IFA Scheduling Committee Member" as IFASchedulingCommitteeMember
+actor Teams
+entity System
+
+loop every year
+    IFASchedulingCommitteeMember -> System: Plan and schedule games
+    activate System
+    System -> Referees: Alert for scheduling
+    Referees -> System: Enter available dates
+    System -> IFASchedulingCommitteeMember: Display referees' available dates
+    deactivate System
+
+    IFASchedulingCommitteeMember -> System: Enter parameters for schedule
+    activate System
+    IFASchedulingCommitteeMember -> System: Enter referees' available dates
+    opt Give team a rest period of “n” days between two consecutive matches
+        IFASchedulingCommitteeMember -> System: Enter “n” days between two consecutive matches
+    end
+
+    System -> System: Generate automatic schedule
+    System -> System: All schedules are archived for future reference
+    System -> Teams: Alert for schedule
+    System -> Referees: Alert for schedule
+    deactivate System
+
+    opt If a senior member of scheduling committee would like to change the schedule
+        IFASchedulingCommitteeMember -> System: Reschedule the matches and explain the reason
+        activate System
+        alt Reschedule approved
+            System -> IFASchedulingCommitteeMember: Reschedule is approved
+            System -> System: All schedules are archived for future reference
+            System -> Teams: Alert for reschedule
+            System -> Referees: Alert for reschedule
+        else Reschedule is not approved
+            System -> IFASchedulingCommitteeMember: Reschedule is not approved
+        end
+        deactivate System
+    end
+end
+@enduml

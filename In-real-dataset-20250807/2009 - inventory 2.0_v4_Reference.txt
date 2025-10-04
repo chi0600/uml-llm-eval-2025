@@ -1,0 +1,209 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.4. Manage Attributes and Details
+The system should allow inventory administrators to customize the attributes and details available for each inventory item. Attributes can be defined for each department, and details can be defined for each department and/or category
+3.4.1. Actor(s): Administrator
+3.4.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.4.3. Use Case Dependencies
+1. View Inventory
+3.4.4. Basic Flows:
+1. View Item Attributes
+1.1. User accesses the main inventory screen
+1.2. System displays the Edit Attributes button
+1.3. User clicks the Edit Attributes button
+1.4. System displays the Edit Attributes screen which displays all existing item attributes and their attribute x department assignments
+1.5. Optionally, user filters view by attribute status (active, inactive, all)
+1.6. User clicks the Done button
+1.7. User is taken back to the main inventory screen
+2. View Item Details
+2.1. User accesses the main inventory screen
+2.2. System displays the Edit Details button
+2.3. User clicks the Edit Details button
+2.4. System displays the Edit Details screen which displays all existing item details and their detail x department and category assignments
+2.5. Optionally, user filters view by detail status (active, inactive, all)
+2.6. User clicks the Done button
+2.7. User is taken back to the main inventory screen
+3. Edit Item Attributes
+3.1. User accesses the main inventory screen
+3.2. System displays the Edit Attributes button
+3.3. User clicks the Edit Attributes button
+3.4. System displays the Edit Attributes screen which displays all existing item attributes and their attribute x department assignments
+3.5. Optionally, user filters view by attribute status (active, inactive, all)
+3.6. User edits attributes
+3.6.1. User changes attribute x department assignments
+3.6.2. User changes attribute data
+3.6.3. User changes attribute active x inactive status
+3.6.4. User creates new attribute
+3.6.5. System validates the attribute data
+3.6.6. System updates the Item Attribute information
+3.7. User clicks the Done button
+3.8. User is taken back to the main inventory screen
+4. Edit Item Details
+4.1. User accesses the main inventory screen
+4.2. System displays the Edit Details button
+4.3. User clicks the Edit Details button
+4.4. System displays the Edit Details screen which displays all existing item details and their detail x department and category assignments
+4.5. Optionally, user filters view by detail status (active, inactive, all)
+4.6. User edits details
+4.6.1. User changes detail x department or category assignments
+4.6.2. User changes detail data
+4.6.3. User changes detail active x inactive status
+4.6.4. User creates new detail
+4.6.5. System validates the detail data
+4.6.6. System updates the Item detail information
+4.7. User clicks the Done button
+4.8. User is taken back to the main inventory screen
+3.4.5. Alternative Flows:
+1. View Item Attributes
+None
+2. View Item Details
+None
+3. Edit Item Attributes
+3.1. User cancels the Item Attribute edit and is taken back to the main inventory screen
+3.2. During data validation, data is deemed invalid and an error message is presented to the user
+4. Edit Item Details
+4.1. User cancels the Item Detail edit and is taken back to the main inventory screen
+4.2. During data validation, data is deemed invalid and an error message is presented to the user
+3.4.6. Business Rules:
+1. View Item Attributes
+None
+2. View Item Details
+None
+3. Edit Item Attributes
+3.1. The following fields are mandatory:
+3.1.1. Name
+3.2. The Item Attribute Name must be unique across the inventory
+3.3. The De-Activate Attribute button is replaced with an Activate Attribute button when the attribute is inactive
+3.4. Material and Features attributes can be assigned to any combination of departments
+3.5. Material and Features attributes can be assigned to „All‟ departments
+3.6. Color and Finish attributes can only be set to „All‟ departments
+3.7. An Attribute cannot be set simultaneously to „All‟ departments and to specific department(s)
+3.7.1. Assigning an attribute to „All‟ departments disables the individual department selectors, but preserves the current department selections
+3.7.2. Un-assigning an attribute from the „All‟ departments enables the individual department selectors, restoring the previous department selections
+4. Edit Item Details
+4.1. The available detail types are:
+4.1.1. Number
+4.1.2. Text
+4.1.3. Selection
+4.2. The following fields are mandatory:
+4.2.1. Name
+4.2.2. Type
+4.3. If the Type is set to „Selection‟, then the selection list must contain at least one item
+4.4. The Item Detail Name must be unique across the inventory
+4.5. The De-Activate Detail button is replaced with an Activate Detail button when the detail is inactive
+4.6. Details can be assigned to any combination of departments and categories
+4.7. Details can be assigned to „All‟ departments and/or categories
+4.8. Assigning a detail to a department or category automatically assigns it to its subcategories
+4.8.1. Assignments automatically made by the system can be changed by the user
+3.4.7. Post-Condition(s):
+1. View Item Attributes
+None
+2. View Item Details
+None
+3. Edit Item Attributes
+3.1. The Item Attributes are updated
+4. Edit Item Details
+4.1. The Item Details are updated
+3.4.8. Open Issues:
+None
+3.4.9. Extension Points:
+None
+3.4.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.4 – Manage Attributes and Details
+
+actor "Administrator" as Admin
+participant "Inventory System" as System
+
+== View Item Attributes ==
+Admin -> System : 1.1 Access main inventory screen
+activate System
+System -> Admin : 1.2 Display Edit Attributes button
+Admin -> System : 1.3 Click Edit Attributes button
+System -> Admin : 1.4 Display Edit Attributes screen
+opt Filter view
+Admin -> System : 1.5 Filter view by attribute status(active, inactive, all)
+end
+Admin -> System : 1.6 Click Done button
+System -> Admin : 1.7 Return to main inventory screen
+deactivate System
+
+== View Item Details ==
+Admin -> System : 2.1 Access main inventory screen
+activate System
+System -> Admin : 2.2 Display Edit Details button
+Admin -> System : 2.3 Click Edit Details button
+System -> Admin : 2.4 Display Edit Details screen
+opt Filter view
+Admin -> System : 2.5 Filter view by attribute status(active, inactive, all)
+end
+Admin -> System : 2.6 Click Done button
+System -> Admin : 2.7 Return to main inventory screen
+deactivate System
+
+== Edit Item Attributes ==
+Admin -> System : 3.1 Access main inventory screen
+activate System
+System -> Admin : 3.2 Display Edit Attributes button
+Admin -> System : 3.3 Click Edit Attributes button
+System -> Admin : 3.4 Display Edit Attributes screen
+opt Filter view
+Admin -> System : 3.5 Filter view by attribute status(active, inactive, all)
+end
+
+alt Normal Case
+    Admin -> System : 3.6 Edit attributes
+    Admin -> System : 3.6.1 Change attribute x department assignments
+    Admin -> System : 3.6.2 Change attribute data
+    Admin -> System : 3.6.3 Change attribute active/inactive status
+    Admin -> System : 3.6.4 Create new attribute
+    System -> System : 3.6.5 Validate attribute data
+    alt Data valid
+        System -> System : 3.6.6 Update Item Attribute information
+        Admin -> System : 3.7 Click Done button
+        System -> Admin : 3.8 Return to main inventory screen
+    else Data invalid
+        System -> Admin : Error: Invalid attribute data
+    end
+else Cancels Item Attribute edit
+    Admin -> System : Cancels edit
+    System -> Admin : Return to main inventory screen
+end
+deactivate System
+
+== Edit Item Details ==
+Admin -> System : 4.1 Access main inventory screen
+activate System
+System -> Admin : 4.2 Display Edit Details button
+Admin -> System : 4.3 Click Edit Details button
+System -> Admin : 4.4 Display Edit Details screen
+opt Filter view
+Admin -> System : 3.5 Filter view by attribute status(active, inactive, all)
+end
+
+alt Normal Case
+    Admin -> System : 4.6 Edit details
+    Admin -> System : 4.6.1 Change detail x department/category assignments
+    Admin -> System : 4.6.2 Change detail data
+    Admin -> System : 4.6.3 Change detail active/inactive status
+    Admin -> System : 4.6.4 Create new detail
+    System -> System : 4.6.5 Validate detail data
+    alt Data valid
+        System -> System : 4.6.6 Update Item Detail information
+        Admin -> System : 4.7 Click Done button
+        System -> Admin : 4.8 Return to main inventory screen
+    else Data invalid
+        System -> Admin : Error: Invalid detail data
+    end
+else Cancels Item Detail edit
+    Admin -> System : Cancels edit
+    System -> Admin : Return to main inventory screen
+end
+deactivate System
+
+@enduml

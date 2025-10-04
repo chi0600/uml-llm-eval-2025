@@ -1,0 +1,46 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+Use Case 05 – Get Phonex Search Keys
+
+Goal:
+Obtain computed search keys (using the Phonex algorithm) for a driver's surname and first names.
+
+Description:
+The use case is invoked by a CIA (or an enforcer via a CIA) when issuing a new card. The request includes the driver's surname and first names. TACHOnet validates the input, computes the search keys, and returns them. If the input is invalid, a negative status code is returned.
+
+Basic Flow:
+1. The CIA calls the TACHOnet service with the driver’s surname and first names.
+2. TACHOnet validates the input parameters.
+3. If valid, TACHOnet computes the corresponding search keys.
+4. TACHOnet returns the computed search keys as output parameters.
+
+Alternate Flow:
+2a. If the input parameters are invalid (e.g. contain illegal characters), TACHOnet returns a negative status code.
+
+Pre-conditions:
+The caller provides the mandatory input parameters.
+
+Post-conditions:
+The caller receives the computed search keys or a negative error code.
+
+Reference Response:
+@startuml
+title Use Case 05 – Get Phonex Search Keys
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+
+CIA -> TACHOnet : Send request (Driver's surname and first names)
+activate TACHOnet
+TACHOnet -> TACHOnet : Validate input parameters
+alt Valid input
+    TACHOnet -> TACHOnet : Compute Phonex search keys
+    TACHOnet -> CIA : Return computed search keys
+else Invalid input
+    TACHOnet -> CIA : Return negative status code
+end
+deactivate TACHOnet
+
+@enduml

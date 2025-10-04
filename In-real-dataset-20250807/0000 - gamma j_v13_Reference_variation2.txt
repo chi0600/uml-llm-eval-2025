@@ -1,0 +1,44 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Remove Plug-ins
+
+Goal:
+Remove a plug-in from the application.
+
+Actors:
+- Administrator
+- Weborder System
+
+Preconditions:
+Administrator must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:
+Administrator clicks the button or link to "Remove Plug-ins"
+
+Basic Scenario:
+1. Administrator clicks the button or link to initiate the plug-in deletion process.
+2. System prompts the Administrator to select the desired plug-in module.
+3. System removes the plug-in and validates changes.
+
+Postconditions:
+A plug-in is removed from the application.
+
+Reference Response:
+@startuml
+title Remove Plug-ins
+
+actor Administrator
+participant "Weborder System" as System
+
+Administrator -> System : Click "Remove Plug-ins"
+activate System
+System -> Administrator : Prompt to select plug-in module
+Administrator -> System : Select plug-in module
+System -> System : Remove and validate plug-in
+System -> Administrator : Confirm removal to Administrator
+deactivate System
+
+@enduml

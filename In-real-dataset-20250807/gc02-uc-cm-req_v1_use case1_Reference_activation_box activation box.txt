@@ -1,0 +1,47 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:  
+Use Case 1
+Summary: A doctor has an appointment, and will make a change to the global database.
+Actors: Doctor, patient
+Precondition: Patient has scheduled an appointment with the doctor
+Description:
+1.	Doctor opens the patient’s EMR and views his medical history.
+2.	Patient comes into the doctor’s office at the appointed time.
+3.	Patient explains his problem to the doctor.
+4.	Doctor writes a summary and diagnosis on his tablet.
+5.	After the patient leaves, the doctor uploads this text to the EMR of the patient, so the global database is updated.
+Postcondition: The database is updated with new information about the patient.
+
+Alternate flow:
+5a. The doctor edits an existing entry in the patient’s EMR.
+ 
+
+Reference Response:
+@startuml
+actor Doctor
+actor Patient
+database "Global Database" as GD
+
+activate Doctor
+Doctor -> GD: Open patient's EMR
+activate GD
+GD -> Doctor: Display medical history
+deactivate GD
+
+Patient -> Doctor: Arrive at appointment time
+Patient -> Doctor: Explain problem
+
+Doctor -> Doctor: Write summary and diagnosis
+
+alt Upload summary and diagnosis
+    Doctor -> GD: Upload new text
+    activate GD
+else Edit existing entry
+    Doctor -> GD: Edit existing entry
+end
+
+GD -> GD: Update patient information
+deactivate GD
+deactivate Doctor
+@enduml

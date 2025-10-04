@@ -1,0 +1,47 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Remove Product
+
+Goal:
+Remove a product from the system.
+
+Actors:
+- Sales Person
+- Weborder System
+
+Preconditions:
+Sales Person must be able to access the weborder system via a web browser with HTTPS.
+
+Triggers:
+Sales Person clicks the button or link to "Remove Product"
+
+Basic Scenario:
+1. Sales Person clicks the button or link to initiate the Remove Product process.
+2. System prompts the Sales Person to select a product by searching or viewing a list of products.
+3. System validates the product information.
+4. System removes the product page and associated product information from the system.
+5. System displays a confirmation or updated product page.
+
+Postconditions:
+A product is deleted from the system.
+
+Reference Response:
+@startuml
+title Remove Product
+
+actor SalesPerson
+participant "Weborder System" as System
+
+SalesPerson -> System : Click "Remove Product"
+activate System
+System -> SalesPerson : Prompt to select product (search or list)
+SalesPerson -> System : Select product
+System -> System : Validate product information
+System -> System : Remove product page and details
+System -> SalesPerson : Display confirmation/updated product page
+deactivate System
+
+@enduml

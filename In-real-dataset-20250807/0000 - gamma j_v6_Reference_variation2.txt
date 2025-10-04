@@ -1,0 +1,66 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Checkout An Order
+
+Goal:
+Customer places and confirms an order for the checkout process.
+
+Actors:
+- Customer
+- Weborder System
+
+Preconditions:
+1. Customer must be logged in on the system.
+2. Customer must have item(s) in the shopping cart.
+
+Triggers:
+Customer clicks the button or link to "Checkout"
+
+Basic Scenario:
+1. Customer clicks the button or link to initiate the checkout process.
+2. System calculates the order of items in the shopping cart.
+3. System appends a cookie with a flag for the checkout process.
+4. System presents the customer with account details and payment methods.
+5. Customer confirms account details and payment methods.
+6. Customer confirms the order.
+7. System stores the order confirmation and order details.
+8. System sends an email confirmation to the Customer.
+9. System appends a cookie with a flag for completed checkout process.
+
+Alternative Scenario:
+A1. Customer terminates the web browser during the checkout process.
+A2. Customer returns to the weborder interface.
+A3. System recognizes the checkout cookie and goes to step 4 (Basic Scenario).
+
+Postconditions:
+The Customer has placed and confirmed an order.
+
+Reference Response:
+@startuml
+title Checkout An Order
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Checkout"
+activate System
+System -> System : Calculate order of items
+System -> System : Append cookie with checkout flag
+
+alt Browser closed during checkout
+    Customer -> System : Close browser during checkout
+    Customer -> System : Reopen weborder interface
+    System -> System : Recognize checkout cookie
+end
+System -> Customer : Display account details and payment methods
+Customer -> System : Confirm account details and payment methods
+Customer -> System : Confirm order
+System -> System : Store order confirmation and details
+System -> Customer : Send email confirmation
+System -> System : Append cookie with completed checkout flag
+deactivate System
+
+@enduml

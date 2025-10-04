@@ -1,0 +1,45 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+Use Case 06 – Get US/Ascii Transliteration
+
+Description:
+This use case consists of obtaining from TACHOnet the US/Ascii (ISO 646 IRV) transliteration of a driver’s data (surname, first names, place of birth, and driving license number). Currently, it supports transliteration from Greek (per ISO 843:1997) or Latin to US/Ascii; other transliterations (e.g. Cyrillic to US/Ascii per ISO 9:1995) may be added later.
+
+Basic Flow:
+1. The CIA calls the TACHOnet service providing the driver’s surname, first names, place of birth, and driving license number.
+2. TACHOnet checks the input parameters and, if valid, transliterates the provided values into US/Ascii.
+3. TACHOnet returns the transliterated values as output.
+
+Alternate Flow:
+2a. If the input is invalid (e.g. contains illegal characters), TACHOnet returns a negative status code.
+
+Pre-conditions:
+The caller must supply all mandatory input parameters.
+
+Post-conditions:
+The caller receives either the computed transliterations or a negative error code.
+
+Actors:
+- A CIA (or enforcer via a CIA)
+- The TACHOnet system
+
+Reference Response:
+@startuml
+title Use Case 06 – Get US/Ascii Transliteration
+
+actor CIA as "Card Issuing Authority"
+participant TACHOnet
+
+CIA -> TACHOnet : Send request (Surname, First Names, Place of Birth, Driving License Number)
+activate TACHOnet
+TACHOnet -> TACHOnet : Validate input parameters
+alt Valid input
+    TACHOnet -> TACHOnet : Transliterate values to US/Ascii
+    TACHOnet -> CIA : Return transliterated values
+else Invalid input
+    TACHOnet -> CIA : Return negative status code
+end
+deactivate TACHOnet
+@enduml

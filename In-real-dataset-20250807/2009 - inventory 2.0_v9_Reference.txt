@@ -1,0 +1,130 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.9. Receive Acquisition
+A donor in possession of a valid acquisition number can proceed to the receiving dock where the items to be donated will be received and processed, and a donation receipt will be generated. Alternatively, a donor may go directly to the receiving dock, in which case a new acquisition is created by the Receiving Associate before items can be received and processed.
+The screens used for the acquisition process should simplify and expedite the data entry process, allowing the Receiving Associate to enter only the information needed to generate the donation receipt. Additional attributes needed to complete the item information and effectively add the item to the inventory can be added at a second step, after the receipt has been printed and the donor has been served. The Receiving Associate can print temporary acquisition labels for items that require further processing.
+Pick Up and Decon crews may also initiate the receiving process, entering as much detailed information about the donated items as desired, and generating a donation receipt. They cannot, however, add items to the inventory or complete the acquisition process. A Receiving Associate is required to review all the acquisition information before those actions can take place.
+3.9.1. Actor(s): Donor / Primary Contact Administrator Director Manager Customer Service Representative Receiving Associate Pick Up Associate Decon Associate
+3.9.2. Assumptions, Pre-Conditions & Triggers:
+1. An acquisition has been created for this donation in CRM and exists in the system in the Expected state.
+3.9.3. Use Case Dependencies
+1. View Acquisitions
+2. Add Item to Inventory
+3.9.4. Basic Flows:
+1. Donor or Primary Contact arrives at receiving dock with a valid donation number
+2. Receiving Associate locates donation request in the system (see View Acquisitions)
+3. System displays donation request information
+4. Receiving Associate enters information about each donated item into the donation request (see Add Item to Inventory)
+4.1. A new item can be added to the list by cloning an existing item
+4.2. A new item can be added by clicking the Add Item button
+4.3. An item can be removed by setting the received quantity to zero
+5. Receiving Associate prints a donation receipt
+6. Receiving Associate optionally writes information to the receipt by hand such as condition
+7. Donation receipt is given to the Donor or Primary Contact
+8. Receiving Associate prints item tags for unique and stock items (see Add Item to Inventory)
+9. Receiving Associate attaches printed tags to corresponding items
+10. Receiving Associate closes donation request
+3.9.5. Alternative Flows:
+1. Items can be set aside for further processing
+1.1. In this case, the Receiving Associate can alternatively tags displaying the donation number and donor information.
+1.2. The acquisition is left in the Partially Received state until processing is completed at a later time
+3.9.6. Business Rules:
+1. Donation receipt information:
+1.1. Donation date
+1.2. List of donated items
+1.2.1. Description
+1.2.2. Quantity Received
+1.2.3. Condition
+1.3. Name of Construction Junction representative
+1.4. Signature of Construction Junction representative
+1.5. Construction Junction contact information
+1.6. Tax deduction information text
+2. Buttons and shortcuts should be easy to click on a touch screen workstation. Extra spacing between rows should be added if necessary.
+3. The donation item name initially displayed on each item row is the donation item name in the CRM acquisition record.
+4. The Pickup and Decon crews can change anything on this screen and also in the item detail screen, but can't complete the acquisition or add items to the inventory (buttons are disabled)
+5. The Email Receipt button takes you to the Email Receipt screen
+6. The email receipt screen shows all email addresses associated with the Acquisition in CRM
+6.1. One or more can be selected to receive the email receipt
+6.2. If no emails are available, they need to be added in CRM
+7. The system must record every time a receipt is printed or emailed
+8. Selecting a stock category takes you back to the acquisition screen , not to the items details page
+9. Selecting an under $5 category prompts for a description and also takes you back to the acquisition screen
+10. Condition is optional. If left blank, the donor may write it manually on the receipt
+11. Clicking add item takes you directly to the inventory matrix so that the item category can be selected, then to the item details screen
+12. Adding an item here also adds a record to the Acquisition in CRM (shared entities)
+13. Updating an item here updates the inventory fields on the Acquisition record in CRM (shared entities)
+14. Completing the acquisition freezes the record in both CRM and the Inventory Management System
+15. The system should record the total amount of time taken to process each acquisition
+16. The original CRM acquisition data must be kept, not overridden by the values entered here
+3.9.7. Post-Condition(s):
+1. Donated items are present in the Inventory Management System
+2. Unique and stock items have item tags
+3. Unique items are added to POS
+4. Quantities for stock items are updated in POS
+5. Donor has donation receipt
+6. Donation request in the system has a status of Processed
+3.9.8. Open Issues:
+None
+3.9.9. Extension Points:
+None
+3.9.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.9 – Receive Acquisition
+
+actor "Donor / Primary Contact" as Donor
+actor "Receiving Associate" as Associate
+participant "Inventory System" as System
+
+== Locate Donation Request ==
+Donor -> Associate : 1. Arrives at receiving dock with donation number
+
+alt Items require further processing
+    Associate -> System : Tag items with donation number & donor info
+    System -> Associate : Leave acquisition in 'Partially Received' state
+end
+
+Associate -> System : 2. Locate donation request
+ref over Associate, System: see View Acquisitions
+activate System
+System -> Associate : 3. Display donation request information
+deactivate System
+
+== Enter Donated Items ==
+Associate -> System : 4. Enter donated item information
+ref over Associate, System: see Add Item to Inventory
+activate System
+alt Add New Item
+    Associate -> System : 4.2 Click 'Add Item' button
+else Clone Existing Item
+    Associate -> System : 4.1 Clone existing item
+else Remove Item
+    Associate -> System : 4.3 Set quantity to zero
+end
+deactivate System
+
+== Print and Issue Receipt ==
+Associate -> System : 5. Print donation receipt
+activate System
+opt write condition manually
+Associate -> Associate : 6. Write condition manually
+end
+Associate -> Donor : 7. Provide receipt to donor
+deactivate System
+
+== Print and Attach Item Tags ==
+Associate -> System : 8. Print item tags for unique & stock items
+ref over Associate, System : see Add Item to Inventory
+activate System
+Associate -> Associate : 9. Attach printed tags to items
+deactivate System
+
+== Close Donation Request ==
+Associate -> System : 10. Close donation request
+activate System
+deactivate System
+
+@enduml

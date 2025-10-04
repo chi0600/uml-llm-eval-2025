@@ -1,0 +1,261 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.3. Manage Categories
+The system should allow inventory administrators to customize the inventory structure by defining the inventory departments and categories.
+3.3.1. Actor(s): Administrator
+3.3.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.3.3. Use Case Dependencies
+1. View Inventory
+2. Manage Attributes and Details
+3.3.4. Basic Flows:
+1. Add Category
+1.1. User navigates to a Department or Category (see View Inventory)
+1.2. System displays the Add Category buttons
+1.2.1. Unique Item
+1.2.2. Stock Item
+1.3. User clicks the desired Add Category button
+1.4. System displays the appropriate screen for the Category type
+1.4.1. Unique Item
+1.4.2. Stock Item
+1.5. User enters Category data
+1.6. System validates the Category data
+1.7. System adds the new Category to the inventory
+1.8. User is taken back to the parent Department or Category of the added Category
+2. Edit Category
+2.1. User navigates to a Category (see View Inventory)
+2.2. System displays the Edit Category button
+2.3. User clicks the Edit Category button
+2.4. System displays the appropriate screen for the Category type
+2.4.1. Unique Item
+2.4.2. Stock Item
+2.5. User edits Category data
+2.6. System validates the Category data
+2.7. System updates the Category information
+2.8. User is taken back to the Category screen
+3. Delete Category
+3.1. User navigates to a Category (see View Inventory)
+3.2. System displays the Edit Category button
+3.3. User clicks the Edit Category button
+3.4. System displays the appropriate screen for the Category type
+3.4.1. Unique Item
+3.4.2. Stock Item
+3.5. User clicks the Delete Category button
+3.6. System validates the Category deletion
+3.7. System removes the Category from the inventory
+3.8. User is taken back to the parent Department or Category of the deleted Category
+4. Move Categories
+4.1. User navigates to a Department or Category (see View Inventory)
+4.2. System displays the Move Categories button
+4.3. User clicks the Move Categories button
+4.4. System displays the Move Categories screen
+4.5. User selects Categories to move
+4.6. User selects target location on categorized inventory for the moved Categories
+4.6.1. User may select an existing Department or Category
+4.6.2. User may choose to create a new Category to hold the moved Categories
+4.6.2.1. In this case, user selects the parent Department or Category of the new Category to be created
+4.6.2.2. User enters the new Category data
+4.7. User selects the type of move to be performed
+4.7.1. Move selected
+4.7.2. Merge the contents (items) of the selected categories and add them to the target Department or Category
+4.8. System validates the entered data
+4.9. System moves the selected Categories
+4.10. User is taken back to the parent Department or Category of the moved Categories
+3.3.5. Alternative Flows:
+1. Add Category
+1.1. User cancels the Category add and is taken back to parent Department or Category
+1.2. During data validation, data is deemed invalid and an error message is presented to the user
+2. Edit Category
+2.1. User cancels the Category edit and is taken back to Category screen
+2.2. During data validation, data is deemed invalid and an error message is presented to the user
+3. Delete Category
+3.1. User cancels the Category deletion and is taken back to the Category screen
+3.2. During deletion validation, deletion is deemed invalid and an error message is presented to the user
+4. Move Categories
+4.1. User cancels the Category move and is taken back to the parent Department or Category screen
+4.2. During move validation, move is deemed invalid and an error message is presented to the user
+3.3.6. Business Rules:
+1. Add Category
+1.1. The following fields are mandatory:
+1.1.1. Unique Item Category
+1.1.1.1. Name
+1.1.1.2. Unique Tag
+1.1.2. Stock Item Category
+1.1.2.1. Name
+1.1.2.2. Unique Tag
+1.1.2.3. Price
+1.2. The Category Name must be unique across the inventory
+1.3. The Category‟s Unique Tag must be unique across the inventory
+1.4. The Unique Tag must be at most 18 characters long
+1.5. There must be at least one slot available in the Category matrix at the level the new Category will be created to hold the new Category
+1.6. The available options in the Material, Finish, Color and Features selectors should be the ones defined for the selected department (see Manage Attributes and Details)
+1.7. The fields and available options under the Details section should be the ones defined for the selected category (see Manage Attributes and Details)
+1.8. When a Stock Item Category is created, a corresponding item is added to QuickBooks POS
+1.8.1. The ID of the item in POS is set to the Category‟s Unique Tag
+1.8.2. The initial item quantity in POS is set to zero
+2. Edit Category
+2.1. The following fields are mandatory:
+2.1.1. Unique Item Category
+2.1.1.1. Name
+2.1.1.2. Unique Tag
+2.1.2. Stock Item Category
+2.1.2.1. Name
+2.1.2.2. Unique Tag
+2.1.2.3. Price
+2.2. The Category Name must be unique across the inventory
+2.3. The Category‟s Unique Tag must be unique across the inventory
+2.4. The Unique Tag must be at most 18 characters long
+2.5. The available options in the Material, Finish, Color and Features selectors should be the ones defined for the selected department (see Manage Attributes and Details)
+2.6. The fields and available options under the Details section should be the ones defined for the selected category (see Manage Attributes and Details)
+2.7. When a Stock Item Category is updated, the corresponding item is updated in QuickBooks POS
+2.7.1. The ID of the item in POS is set to the Category‟s Unique Tag
+2.7.2. The initial item quantity in POS is set to zero
+2.8. Generic categories and Under $5 item categories are generated automatically by the system and cannot be modified
+3. Delete Category
+3.1. When a Category is deleted, all of its items should be moved to the parent category
+3.2. The system must ask for confirmation before deleting a Category
+3.3. Generic item categories and Under $5 item categories are generated automatically by the system and cannot be deleted
+4. Move Categories
+4.1. The Categories to Move selector is populated with the categories seen on the matrix at the level where the Move Categories button was pressed.
+4.2. User must select at least one Category to move
+4.3. User must select either an existing or new target Department or Category
+4.4. User cannot move categories to any Departments or Categories that don‟t have enough slots available in the matrix to hold the moved categories
+4.5. User cannot move categories to any of their subcategories (cannot create loops in the inventory hierarchy)
+4.6. If a new target Category is selected
+4.6.1. User must enter
+4.6.1.1. Name
+4.6.1.2. Unique Tag
+4.6.1.3. Parent Department or Category of the new Category
+4.6.2. The Category is created as a Unique Item Category
+4.7. User cannot select a Stock Item, Under $5 Category or Generic Category as the target Category
+4.8. When a Category is moved it keeps its assigned Item Details
+4.9. When the option to merge the contents of the selected Categories is selected, the Item Details assigned to the selected Categories are combined and assigned to the target Department or Category
+4.10. When the option to merge the contents of the selected Categories is selected, the moved items must be updated in QuickBooks POS
+3.3.7. Post-Condition(s):
+1. Add Category
+1.1. The new Category is added
+2. Edit Category
+2.1. The Category is updated
+3. Delete Category
+3.1. The Category is deleted
+4. Move Categories
+4.1. If the „move to a new Category‟ option is selected, a new Category is created
+4.2. If the „move categories and make them children‟ option is selected, the selected Categories are moved to the selected target location
+4.3. If the „merge contents of selected categories‟ option is selected, the contents of the selected Categories are moved to the selected target location
+3.3.8. Open Issues:
+None
+3.3.9. Extension Points:
+None
+3.3.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.3 – Manage Categories
+
+actor "Administrator" as Admin
+participant "Inventory System" as System
+
+== Add Category ==
+Admin -> System : 1.1 Navigate to a Department or Category
+ref over Admin, System: See View Inventory
+activate System
+System -> Admin : 1.2 Display Add Category buttons (Unique Item, Stock Item)
+Admin -> System : 1.3 Click desired Add Category button
+System -> Admin : 1.4 Display screen for Category type
+
+alt Normal Case
+    Admin -> System : 1.5 Enter Category data
+    System -> System : 1.6 Validate Category data
+    alt Data valid
+        System -> System : 1.7 Add Category to inventory
+        System -> Admin : 1.8 Return to parent Department or Category
+    else Data invalid
+        System -> Admin : Error: Invalid Category data
+    end
+else Cancels Category add
+    Admin -> System : Cancels Category add
+    System -> Admin : Return to parent Department or Category
+end
+deactivate System
+
+== Edit Category ==
+Admin -> System : 2.1 Navigate to a Category
+ref over Admin, System: See View Inventory
+activate System
+System -> Admin : 2.2 Display Edit Category button
+Admin -> System : 2.3 Click Edit Category button
+System -> Admin : 2.4 Display screen for Category type
+
+alt Normal Case
+    Admin -> System : 2.5 Edit Category data
+    System -> System : 2.6 Validate Category data
+    alt Data valid
+        System -> System : 2.7 Update Category information
+        System -> Admin : 2.8 Return to Category screen
+    else Data invalid
+        System -> Admin : Error: Invalid Category data
+    end
+else Cancels Category edit
+    Admin -> System : Cancels Category edit
+    System -> Admin : Return to Category screen
+end
+deactivate System
+
+== Delete Category ==
+Admin -> System : 3.1 Navigate to a Category
+ref over Admin, System: See View Inventory
+activate System
+System -> Admin : 3.2 Display Edit Category button
+Admin -> System : 3.3 Click Edit Category button
+System -> Admin : 3.4 Display screen for Category type
+
+alt Normal Case
+    Admin -> System : 3.5 Click Delete Category button
+    System -> System : 3.6 Validate Category deletion
+    alt Deletion valid
+        System -> System : 3.7 Remove Category from inventory
+        System -> Admin : 3.8 Return to parent Department or Category
+    else Deletion invalid
+        System -> Admin : Error: Cannot delete Category
+    end
+else Cancels Category deletion
+    Admin -> System : Cancels Category deletion
+    System -> Admin : Return to Category screen
+end
+deactivate System
+
+== Move Categories ==
+Admin -> System : 4.1 Navigate to a Department or Category
+ref over Admin, System: See View Inventory
+activate System
+System -> Admin : 4.2 Display Move Categories button
+Admin -> System : 4.3 Click Move Categories button
+System -> Admin : 4.4 Display Move Categories screen
+
+alt Normal Case
+Admin -> System : 4.5 Select Categories to move
+Admin -> System : 4.6 Select target location (existing or new Category)
+
+alt New Category
+    Admin -> System : 4.6.2.1 Selects Parent Department or Category of New Category
+    Admin -> System : 4.6.2.2 Enter new Category data
+end
+
+Admin -> System : 4.7 Select type of move (Move, Merge)
+System -> System : 4.8 Validate move data
+
+alt Move valid
+    System -> System : 4.9 Perform move
+    System -> Admin : 4.10 Return to parent Department or Category
+else Move invalid
+    System -> Admin : Error: Invalid move
+end
+
+else Cancels move
+    Admin -> System : Cancels move
+    System -> Admin : Return to parent Department or Category
+end
+deactivate System
+@enduml

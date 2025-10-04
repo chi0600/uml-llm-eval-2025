@@ -1,0 +1,103 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.8. View Acquisitions
+Acquisition records for Drop-Off, Pickup and Decon donations are created in the CRM system. Inventory Management users should be able to view all past and current acquisitions. Receiving Associates use this function to locate an expected acquisition when receiving a donation at the loading dock. Pickup and Decon crews may also use this function to initiate the process of receiving items while in the truck, on their way to the receiving dock.
+Drop Off acquisitions are not typically pre-scheduled as Pick Up and Decon acquisitions except for those submitted through the organizational website. As such, when a donor arrives with an unexpected drop off donation, a new acquisition needs to be able to be created in the CRM system first, at either the customer service desk or at the dock, before it can be viewed in the acquisitions screen.
+3.8.1. Actor(s): Administrator Director Manager Customer Service Representative Receiving Associate Pick Up Associate Decon Associate
+3.8.2. Assumptions, Pre-Conditions & Triggers:
+1. User is logged into the system
+3.8.3. Use Case Dependencies
+None
+3.8.4. Basic Flows:
+1. User accesses the acquisitions screen
+2. The screen displays a list of all acquisitions, latest ones at the top of the list
+3. User may optionally filter the acquisitions displayed on the screen by changing filtering options
+4. User clicks on an acquisition record
+5. System display the details for that acquisition, including expected items
+3.8.5. Alternative Flows:
+1. Drop Off acquisitions
+1.1. User may alternatively click the New Drop Off button on the acquisition list screen which redirects the user to the CRM acquisition creation screen
+1.2. User creates new Drop Off acquisition in the CRM system
+1.3. User returns to the acquisitions screen and sees the newly created Drop Off acquisition
+2. User can use a bar code scanner to scan the acquisition ticket generated at customer service
+3.8.6. Business Rules:
+1. The acquisitions screen should display:
+1.1. Acquisition Number
+1.2. Type
+1.2.1. Drop Off
+1.2.2. Pick Up
+1.2.3. Decon
+1.2.4. Donor Name with Zip Code
+1.2.5. Primary Contact Name
+1.2.6. Primary Contact Phone Number
+1.2.7. Start Date
+1.2.8. End Date
+1.2.9. Status
+1.2.9.1. Expected
+1.2.9.2. Partially Received
+1.2.9.3. Completed
+2. Users should be able to filter (on multiple fields simultaneously ) acquisitions by:
+2.1. Type
+2.2. Donor and Primary Contact Name
+2.3. Acquisition Number
+2.4. Primary Contact Phone Number
+2.5. Status
+3. User should be able to sort the acquisition list by any of its columns
+4. The default sorting is by descending order of acquisition End Date
+5. Changes to acquisition information in CRM should be immediately visible in the Inventory Management System.
+6. Changes to acquisition information in the Inventory Management System should be immediately visible in CRM.
+7. CRM should allow the creation of a Drop Off acquisition where only a Zip Code and Donation Location Type or Donor Type are provided.
+8. All acquisitions are created in CRM.
+9. The system should provide a link from the acquisitions view in the Inventory Management System to the acquisition creation screen in CRM for easy access.
+10. Inventory Management users should be granted permission to create new Drop Off acquisitions in CRM in order to access that functionality.
+3.8.7. Post-Condition(s):
+None
+3.8.8. Open Issues:
+None
+3.8.9. Extension Points:
+None
+3.8.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.8 – View Acquisitions
+
+actor "User" as User
+participant "Inventory System" as System
+participant "CRM System" as CRM
+
+User -> System : 1. Access acquisitions screen
+activate System
+
+alt Create Drop Off Acquisition
+User -> System : Click 'New Drop Off' button
+System -> CRM : Redirect user to CRM acquisition creation screen
+activate CRM
+User -> CRM : Create new Drop Off acquisition
+CRM -> System : Update acquisition list with new Drop Off record
+deactivate CRM
+User -> System : Return to acquisitions screen
+end
+
+alt Scan Acquisition Ticket
+User -> System : Scan acquisition ticket (bar code scanner)
+end
+
+System -> User : 2. Display list of all acquisitions (latest at top)
+deactivate System
+
+opt Filter acquisitions
+User -> System : 3. Apply filtering options
+activate System
+System -> User : Display filtered acquisitions
+end
+deactivate System
+
+User -> System : 4. Click on an acquisition record
+activate System
+System -> User : 5. Display acquisition details (including expected items)
+deactivate System
+
+@enduml

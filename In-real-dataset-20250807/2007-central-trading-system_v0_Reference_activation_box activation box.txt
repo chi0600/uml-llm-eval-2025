@@ -1,0 +1,71 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+Use-case Sell stock 
+Primary actor Transaction User Interface 
+Goal in context To fulfill the sell transaction 
+Preconditions 
+Customer has successfully logged into UI and submit the sell 
+information 
+Trigger The ‘sell’ button on UI been clicked 
+Scenario 
+1. transaction user interface: give the sell instruction 
+2. central trading system: save the sell instruction 
+3. central trading system: match the instructions with the 
+same stock id 
+4. central trading system: make a trade by matching 
+5. central trading system: modify the information of matched 
+instructions 
+Exception 
+1. all the operations have been suspended 
+2. some deal exceptions come up 
+3. no matched stock with the buy instruction 
+Priority Essential, must be implemented 
+When available First increment 
+Frequency of use Frequent 
+Channel to actor Via transaction user interface 
+Secondary actors Trading System Management 
+Channels to 
+secondary actors 
+Via central trading system interface 
+Open issues 
+1. Should the trade information return to Transaction User 
+Interface immediately when the deal is done? 
+2. Should the failure of trade return to Transaction User 
+Interface the next day? 
+3. If exception happens, is exception log needed? 
+4. security issue
+
+Reference Response:
+@startuml
+actor Customer
+actor "Transaction User Interface" as TUI
+participant "Central Trading System" as CTS
+group Trigger
+Customer -> TUI: Click 'Sell' button
+end
+
+TUI -> CTS: Give sell instruction
+activate CTS
+alt common case
+CTS -> CTS: Save the sell instruction
+CTS -> CTS: Match the instructions with the same stock id
+alt Matched stock found
+    CTS -> CTS: Make a trade by matching
+    CTS -> CTS: Modify the information of matched instructions
+    CTS -> TUI: Trade information updated
+    TUI -> Customer: Display Trade successful
+else No matched stock found
+    CTS -> TUI: No matched stock with buy instruction
+    TUI -> Customer: Display Trade failed
+else Some deal exceptions come up
+    CTS -> TUI: Deal exceptions come up
+    TUI -> Customer: Display Trade failed
+end
+else all the operations have been suspended
+    CTS -> TUI: All the operations have been suspended
+    deactivate CTS
+    TUI -> Customer: Display Trade failed
+end
+@enduml
+

@@ -1,0 +1,98 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it. 
+Requirements:
+3.14 Change Language 
+This feature allows user to choose one of the language translations that are available in KeePass 
+3.14.1 Description 
+The user can select between a number of translations that are available at KeePass website. 
+There are available translations in Arabic, Brazilian, Bulgarian, Catalan, Chinese 
+(Simplified and Traditional), Czech, Danish, Dutch, English, Estonian, Finnish, French, 
+Galician, German, Greek, Hebrew, Hungarian, Italian, Japanese, Korean, Lithuanian, 
+Macedonian, Malay, Norwegian, Polish, Portuguese, Romanian, Russian, Serbian, Slovak, 
+Spanish, Swedish, Turkish and Ukrainian. All the user has to do is to select change 
+language from the view menu and then the language he wants. If he already has download 
+languages packets he can choose one of them. If he wants another language pack he can 
+select get more language. Doing this he will be transferred at KeePass website and choose 
+the language he wants for downloading. 
+ 3.14.2. Stimulus/Response Sequences 
+Data Flow
+ 3.14.2.1 Basic Data Flow
+ 
+ 1. User opens KeePass and selects to change language from the view menu 
+ 2. The user selects a language to load from the list that appears 
+ 3. A message appears that informs user that the installation has been done and in 
+ order for the changes to take place KeePass must be restarted 
+Software Requirements Specification for KeePass Password Safe Page 21 
+ 4. User selects yes (restart now) 
+ 5. KeePass asks to save any changes that may have been made in the database and 
+ restarts 
+ 6. User unlocks the database using the Master Password 
+ 7. The database appears translated in the new language 
+3.14.2.2 Alternative Data Flows
+3.14.2.2.1 Alternative Data Flow 1 
+ 2. User selects get more languages 
+ 3. The browser opens in KeePass website were translations are located 
+ 4. User selects a language he wants 
+ 5. The language file downloads and can be found at the list with available 
+ languages in the language menu 
+3.14.2.2.2 Alternative Data Flow 2 
+ 4. User selects no (restart later) 
+ 5. No changes are appeared in the database until the next time KeePass restarts 
+3.14.2.2.3 Alternative Data Flow 3 
+ 2. User selects close 
+ 3. No changes are made in the database 
+3.14.3 Functional Requirements 
+REQ-18: An internet connection and a browser are required in order to download new 
+ language translations
+
+Reference Response: 
+@startuml
+actor User
+participant KeePass
+participant Browser
+
+User -> KeePass: Open KeePass
+activate KeePass
+User -> KeePass: Select "Change Language" from the view menu
+KeePass -> User: Display list of available languages
+
+alt Select one language
+    User -> KeePass: Select a language to load
+    KeePass -> User: Inform installation done, restart required
+
+    alt Select "Yes"
+        User -> KeePass: Select "Yes" (restart now)
+        KeePass -> KeePass: Prompt to save any changes
+        User -> KeePass: Save changes
+        KeePass -> KeePass: Restart KeePass
+        User -> KeePass: Unlock the database using the Master Password
+        KeePass -> User: Display database in the new language
+    else Select "No"
+        User -> KeePass: Select "No" (restart later)
+    end
+else Select get more languages
+    User -> KeePass: Select "Get more languages"
+    KeePass -> Browser: Open KeePass website for translations
+    activate Browser
+    User -> Browser: Select a language to download
+    Browser -> KeePass: Download language file
+    deactivate Browser
+    KeePass -> User: Display downloaded language in the list
+    KeePass -> User: Inform installation done, restart required
+
+    alt Select "Yes"
+        User -> KeePass: Select "Yes" (restart now)
+        KeePass -> KeePass: Prompt to save any changes
+        User -> KeePass: Save changes
+        KeePass -> KeePass: Restart KeePass
+        User -> KeePass: Unlock the database using the Master Password
+        KeePass -> User: Display database in the new language
+    else Select "No"
+        User -> KeePass: Select "No" (restart later)
+    end
+else Select close
+    User -> KeePass: Select close
+end
+
+deactivate KeePass
+@enduml

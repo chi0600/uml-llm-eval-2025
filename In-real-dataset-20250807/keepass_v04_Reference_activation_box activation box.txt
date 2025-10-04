@@ -1,0 +1,63 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it. 
+Requirements:
+3.1 New Database 
+This feature provides the ability to create a new database
+3.1.1 Description 
+It is the first thing a user must do to begin using KeePass. Its main function is the 
+determination of the master password that will unlock the database from now on 
+3.1.2 Stimulus/Response Sequences 
+Data Flow
+3.1.2.1 Basic Data Flow
+ 
+ 1. User opens KeePass and select New->Database 
+ 2. User writes his private Master Password and/or selects Key File 
+ 3. User selects OK 
+ 4. Master Password confirmation: the user retypes Master Password 
+ 5. The main database window opens 
+3.1.2.2 Alternative Data Flows
+3.1.2.2.1 Alternative Data Flow 1 
+ 3. User selects Help 
+ 4. The help file opens 
+3.1.2.2.2 Alternative Data Flow 2 
+ 3. User selects Cancel 
+ 4. Exit from KeePass 
+3.1.2.2.3 Alternative Data Flow 3 
+ 2a. The user does not determines a Master Password 
+ 2b. A message is appeared which prompts him to enter a password or key file 
+3.1.3 Functional Requirements 
+REQ-1: KeePass must be downloaded and installed 
+REQ-2: Master Password has no limits in length. A whole sentence can be used with more 
+than 100 characters. 
+
+
+Reference Response:
+@startuml
+actor User
+participant KeePass
+
+User -> KeePass: Open KeePass
+activate KeePass
+User -> KeePass: Select New->Database
+
+alt Do not determine a Master Password
+    User -> User: Do not enter Master Password
+    KeePass -> User: Prompt to enter a Master Password or Key File
+end
+
+User -> KeePass: Enter Master Password and/or select Key File
+
+alt Select OK
+    User -> KeePass: Select OK
+    User -> KeePass: Retype Master Password for confirmation
+    KeePass -> User: Main database window opens
+else Select Help
+    User -> KeePass: Select Help
+    KeePass -> User: Help file opens
+else Select Cancel
+    User -> KeePass: Select Cancel
+    KeePass -> User: Exit KeePass
+end
+
+deactivate KeePass
+@enduml

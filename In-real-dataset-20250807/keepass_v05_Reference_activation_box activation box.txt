@@ -1,0 +1,67 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it. 
+Requirements:
+3.6 Add Group/Subgroup 
+This feature is used to keep data organized in categories for easier access. 
+3.6.1 Description
+There is the ability to organize data into groups and subgroups. The user can create a new 
+group or subgroups into an existing group. When creating a group/subgroup the user must 
+select a name and then he can add entries into it. 
+ 3.6.2. Stimulus/Response Sequences 
+Data Flow
+ 3.6.2.1 Basic Data Flow
+ 
+ 1. User opens KeePass and selects to add new group/subgroup 
+ 2. User types a name and has the option to select an image 
+ 3. User selects OK 
+ 4. The group/subgroup is created 
+ 5. The access returns to the database main window
+ 
+3.6.2.2 Alternative Data Flows
+3.6.2.2.1 Alternative Data Flow 1 
+ 2. User leaves the group/subgroup name field empty 
+ 3. A message is appeared “Add a name for the group/subgroup” 
+ 
+3.6.2.2.2 Alternative Data Flow 2 
+ 3. User selects Cancel 
+ 4. The access returns to main window 
+3.6.3 Functional Requirements 
+REQ-7: A name is required in order for the new group/subgroup to be created 
+REQ-8: A subgroup cannot be created when no group is selected
+
+Reference Response: 
+@startuml
+actor User
+participant KeePass
+
+title 3.6 Add Group/Subgroup
+
+User -> KeePass: Open KeePass
+activate KeePass
+
+alt Add new group
+    User -> KeePass: Select to add new group
+else Add new subgroup
+    User -> KeePass: Select an existing group
+    User -> KeePass: Select to add new subgroup
+end
+
+alt Name is provided
+    User -> KeePass: Enter name
+    opt
+        User -> KeePass: Select an image
+    end
+    KeePass -> User: Display entered info
+    alt
+        User -> KeePass: Select OK
+        KeePass -> KeePass: Create group/subgroup
+    else User selects Cancel
+        User -> KeePass: Select Cancel
+    end
+    KeePass -> User: Return to database main window
+else Name is not provided
+    KeePass -> User: Display message "Add a name for the group/subgroup"
+end
+
+deactivate KeePass
+@enduml

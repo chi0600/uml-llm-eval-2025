@@ -1,0 +1,63 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.
+
+Requirements:
+
+Login Customer
+
+Goal:
+Login to a customer account with the system.
+
+Actors:
+- Customer
+- Weborder System
+
+Preconditions:
+Customer account must already be registered.
+
+Triggers:
+Customer clicks the button or link to "Login"
+
+Basic Scenario:
+1. Customer clicks the button or link to initiate the login process.
+2. System prompts the customer for email and password.
+3. Customer enters the login credentials.
+4. System verifies the information.
+5. System creates a session cookie.
+6. System displays the account home page to the Customer.
+
+Alternative Scenario:
+A1. If the system recognizes the Customer's cookie, it immediately displays the account home page.
+B1. If the customer enters incorrect login information, the system prompts the Customer to resend login details to the email account. After confirmation, the process restarts from Step 1.
+
+Postconditions:
+The Customer is logged into the system.
+
+Reference Response:
+@startuml
+title Login Customer
+
+actor Customer
+participant "Weborder System" as System
+
+Customer -> System : Click "Login"
+activate System
+alt Recognizes customer's cookie
+    System -> Customer : Display account home page
+else Requires login details
+    System -> Customer : Prompt for email and password
+    Customer -> System : Enter email and password
+    System -> System : Verify information
+    alt Information verified
+        System -> System : Create session cookie
+        System -> Customer : Display account home page
+    else Incorrect login information
+        System -> Customer : Prompt to resend login details to email
+        Customer -> System : Confirm resend
+        System -> Customer : Send email to registered address
+        System -> Customer : Click "Login" and restart process
+    end
+end
+deactivate System
+
+@enduml

@@ -1,0 +1,40 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it. 
+Requirements: Use Case 5
+Scope: IFA Digital System
+Level: User Management
+Primary Actor: IFA Admin, Team Managers
+Stakeholders: IFA, Teams, Referees
+Main Success Scenario:
+1. IFA wants to on-board a new team.
+2. IFA Admin add the team manager into the system.
+3. Team manager adds players of the team into the system.
+Alternate Success Scenario:
+1. IFA wants to on-board a new referee.
+2. IFA Admin adds the referee into the system.
+Special Requirements:
+• Only IFA Admin can add the team managers and referees.
+• Only team manager can add the team players.
+• Only team manager can remove a team player.
+• Each user profile is private and password protected.
+
+
+Reference Response:
+@startuml
+actor "IFA Admin" as IFAAdmin
+actor "Team Manager" as TeamManager
+participant System
+
+group On-board new team
+    IFAAdmin -> System: Add team manager
+    activate System
+    TeamManager -> System: Add players
+    deactivate System
+end
+
+alt On-board new referee
+    IFAAdmin -> System: Add referee
+    activate System
+    deactivate System
+end
+@enduml

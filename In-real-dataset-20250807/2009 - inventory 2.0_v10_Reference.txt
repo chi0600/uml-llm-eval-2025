@@ -1,0 +1,62 @@
+Prompt: 
+Generate a sequence diagram using PlantUML from these requirements so that I can provide it to Planttext to visualize it.                                                                                                            
+Requirements:
+3.10. Sell Item
+Any item in the inventory may be purchased by a Construction Junction customer. The sale of the item is processed by QuickBooks POS and the inventory must be updated accordingly.
+3.10.1. Actor(s): Buyer Sales Associate Customer Service Representative
+3.10.2. Assumptions, Pre-Conditions & Triggers:
+1. The item being purchased has been previously added to the inventory.
+3.10.3. Use Case Dependencies
+1. Add Item to Inventory
+3.10.4. Basic Flows:
+1. Buyer arrives at the cashier or checkout desk with the items to be purchased
+2. Sales associate scans the item tags
+3. Sales associate processes the sale of the items in QuickBooks POS
+4. The system updates the inventory to reflect the sale
+3.10.5. Alternative Flows:
+1. Certain items sold in QuickBooks POS may not exist in the inventory (under $5 items, for instance). The system must be able to recognize that situation and bypass the inventory update.
+3.10.6. Business Rules:
+1. After a sale in QuickBooks POS, the following item attributes must be updated in the inventory:
+1.1. Sale price
+1.2. Quantity on hand
+2. The sale price must not override the original item price in the inventory
+3. The item quantity on hand in the inventory must be decremented by the quantity sold
+3.10.7. Post-Condition(s):
+1. Inventory is updated to reflect the sale
+3.10.8. Open Issues:
+None
+3.10.9. Extension Points:
+None
+3.10.10. Activity Diagram(s):
+None
+
+Reference Response:
+@startuml
+title Use Case 3.10 – Sell Item
+
+actor "Buyer" as Buyer
+actor "Sales Associate" as Associate
+participant "QuickBooks POS" as POS
+participant "Inventory System" as System
+
+== Process Sale ==
+Buyer -> Associate : 1. Arrives at checkout with items
+
+Associate -> POS : 2. Scan item tags
+activate POS
+Associate -> POS : 3. Process sale in QuickBooks POS
+== Update Inventory ==
+alt Item exists in Inventory
+    POS -> System : Update inventory (sale price, quantity on hand)
+    activate System
+    System -> System : Adjust quantity on hand (- quantity sold)
+    System -> System : Record sale price (do not override original price)
+
+else Item does not exist in Inventory
+    POS -> System : Bypass inventory update (e.g., under $5 items)
+end
+deactivate System
+deactivate POS
+
+
+@enduml
